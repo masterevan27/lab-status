@@ -153,4 +153,20 @@ test('the layout names exactly the groups services.yaml defines', () => {
     assert.deepEqual(layout, groups);
 });
 
+test('VERSION matches the newest CHANGELOG entry', () => {
+    const version = read('VERSION').trim();
+    assert.match(version, /^\d+\.\d+\.\d+$/);
+    const newest = read('CHANGELOG.md').match(/^## (\S+) — \d{4}-\d{2}-\d{2}$/m);
+    assert.ok(newest, 'CHANGELOG.md has no "## x.y.z — YYYY-MM-DD" entry');
+    assert.equal(newest[1], version);
+});
+
+test('the deploy guide covers the steps a first deployment needs', () => {
+    const guide = read('docs/DEPLOY.md');
+    for (const needle of ['LAB_ALLOWED_CIDRS', "docker ps --format '{{.Names}}'", 'tcp://socket-proxy:2375',
+        'Trust Proxy', 'Discord', 'slug `lab`', 'lab-status_kuma_data', 'docker stop']) {
+        assert.ok(guide.includes(needle), `docs/DEPLOY.md does not mention ${needle}`);
+    }
+});
+
 module.exports = { ROOT, read, code, block, service, envFile, envExample, KUMA_HOSTS };
