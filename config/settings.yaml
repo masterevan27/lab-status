@@ -1,0 +1,13 @@
+# Homepage settings: https://gethomepage.dev/configs/settings/
+title: Lab
+theme: dark
+color: slate
+headerStyle: clean
+hideVersion: true
+layout:
+  Lab apps:
+    style: row
+    columns: 3
+  Infrastructure:
+    style: row
+    columns: 3

@@ -1,0 +1,4 @@
+# Read-only Docker API through the socket proxy (compose.yaml).
+lab:
+  host: socket-proxy
+  port: 2375

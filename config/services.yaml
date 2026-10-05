@@ -1,0 +1,52 @@
+# One tile per lab app. `server: lab` with `container:` adds live status, CPU
+# and memory. Names are Compose's <project>-<service>-1; confirm them with
+# `docker ps` on the VM (docs/DEPLOY.md). Foundry, SillyTavern and NPC import
+# get their container: lines at deploy time: their compose files exist only on
+# the VM.
+- Lab apps:
+    - Network tools:
+        href: https://nettools.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: network-tools-portal
+        icon: mdi-lan
+        server: lab
+        container: nettools-web-1
+    - Agent dashboard:
+        href: https://dashboard.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: ai-agent-dashboard
+        icon: mdi-view-dashboard
+        server: lab
+        container: docker-dashboard-1
+    - Foundry VTT:
+        href: https://foundry.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Foundry v13
+        icon: mdi-dice-d20
+    - SillyTavern:
+        href: https://sillytavern.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: SillyTavern and its Foundry uplink
+        icon: mdi-chat
+    - NPC import:
+        href: https://npc-import.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: lancer-npc-import-gui
+        icon: mdi-account-arrow-down
+
+- Infrastructure:
+    - Uptime Kuma:
+        href: https://status.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Monitors and alerts
+        icon: mdi-heart-pulse
+        server: lab
+        container: lab-status-uptime-kuma-1
+        widget:
+          type: uptimekuma
+          url: http://uptime-kuma:3001
+          slug: lab
+    - Caddy:
+        description: homelab-proxy
+        icon: mdi-shield-lock
+        server: lab
+        container: homelab-proxy-caddy-1
+    - Socket proxy:
+        description: Read-only Docker API
+        icon: mdi-docker
+        server: lab
+        container: lab-status-socket-proxy-1

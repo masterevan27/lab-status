@@ -116,4 +116,41 @@ test('secrets and certificates are ignored by Git', () => {
     for (const pattern of ['.env', '*.crt']) assert.match(ignored, new RegExp(`^${pattern.replace(/[.*]/g, '\\$&')}$`, 'm'));
 });
 
+// Homepage copies any of these it cannot find into /app/config, which is
+// mounted read-only, so all of them must exist.
+const HOMEPAGE_FILES = ['bookmarks.yaml', 'custom.css', 'custom.js', 'docker.yaml', 'kubernetes.yaml',
+    'proxmox.yaml', 'services.yaml', 'settings.yaml', 'widgets.yaml'];
+
+test('config holds every file Homepage would otherwise create', () => {
+    for (const file of HOMEPAGE_FILES) assert.ok(fs.existsSync(path.join(ROOT, 'config', file)), `config/${file} missing`);
+});
+
+test('Homepage reads Docker through the socket proxy', () => {
+    assert.match(code('config/docker.yaml'), /^lab:\n {2}host: socket-proxy\n {2}port: 2375$/m);
+});
+
+test('container tiles use the lab Docker server and links use the lab domain', () => {
+    const services = code('config/services.yaml');
+    const containers = [...services.matchAll(/^\s+container: \S+$/gm)];
+    const servers = [...services.matchAll(/^\s+server: (\S+)$/gm)].map((m) => m[1]);
+    assert.ok(containers.length > 0);
+    assert.equal(servers.length, containers.length, 'every container: needs a server: and vice versa');
+    assert.ok(servers.every((s) => s === 'lab'), 'server must be lab');
+    const links = [...services.matchAll(/^\s+href: (\S+)$/gm)].map((m) => m[1]);
+    assert.ok(links.length > 0);
+    for (const link of links) assert.match(link, /^https:\/\/[a-z0-9-]+\.\{\{HOMEPAGE_VAR_LAB_DOMAIN\}\}\/?$/, link);
+    assert.doesNotMatch(services, /spiralfrenzy/i, 'hard-coded domain');
+});
+
+test('the Uptime Kuma widget reads the lab status page over the internal network', () => {
+    assert.match(code('config/services.yaml'),
+        /^\s+type: uptimekuma\n\s+url: http:\/\/uptime-kuma:3001\n\s+slug: lab$/m);
+});
+
+test('the layout names exactly the groups services.yaml defines', () => {
+    const groups = [...code('config/services.yaml').matchAll(/^- (.+):$/gm)].map((m) => m[1]).sort();
+    const layout = [...block(code('config/settings.yaml'), 'layout', 0).matchAll(/^ {2}(\S.*):$/gm)].map((m) => m[1]).sort();
+    assert.deepEqual(layout, groups);
+});
+
 module.exports = { ROOT, read, code, block, service, envFile, envExample, KUMA_HOSTS };

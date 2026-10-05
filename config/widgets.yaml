@@ -1,0 +1,10 @@
+# VM-wide figures: inside a container /proc reports the host's CPU and memory.
+- resources:
+    label: sfdockerhost1
+    cpu: true
+    memory: true
+    disk: /
+- datetime:
+    format:
+      dateStyle: medium
+      timeStyle: short
