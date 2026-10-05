@@ -13,7 +13,13 @@ later), in this repository's checkout.
   show down.
 - homelab-proxy's root certificate is on the VM. Its `docs/TRUST.md` Linux step
   installs it at `/usr/local/share/ca-certificates/homelab-proxy-root.crt`,
-  which is the default `HOMELAB_CA_ROOT`.
+  which is the default `HOMELAB_CA_ROOT`. Check it is a file:
+
+  ```sh
+  test -f /usr/local/share/ca-certificates/homelab-proxy-root.crt && echo ok
+  ```
+
+  Compose refuses to start Uptime Kuma if the file is missing.
 
 ## 2. Confirm container names
 
@@ -44,10 +50,19 @@ create that file empty in `config/` and add it to the test's `HOMEPAGE_FILES`.
 
 ## 4. Uptime Kuma first run
 
+Until an admin account exists, Uptime Kuma's setup page is open to every
+client in `LAB_ALLOWED_CIDRS`, and whoever reaches it first becomes the admin.
+Do step 1 straight away after `docker compose up -d`. If others share your LAN
+or tailnet, do it over an SSH tunnel instead: from your PC run
+`ssh -L 3001:<uptime-kuma container IP>:3001 <vm>` (IP from
+`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}' lab-status-uptime-kuma-1`)
+and open `http://localhost:3001`.
+
 Open `https://status.<LAB_DOMAIN>`:
 
 1. Choose **SQLite** and create the admin account. Keep the password in your
-   password manager.
+   password manager. Reload the page: it must now show the login page, not
+   the setup page.
 2. **Settings → Reverse Proxy → Trust Proxy: Yes.**
 3. **Settings → Docker Hosts → Setup Docker Host:** name `lab`, connection type
    **TCP / HTTP**, daemon `tcp://socket-proxy:2375`. Use **Test**.

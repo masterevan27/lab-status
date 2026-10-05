@@ -35,7 +35,13 @@ services:
     volumes:
       # Database, monitors, admin account and Discord webhook: back it up.
       - kuma_data:/app/data
-      - ${HOMELAB_CA_ROOT:?set HOMELAB_CA_ROOT in .env}:/certs/homelab-root.crt:ro
+      # Long form so a missing file stops Compose instead of becoming a directory.
+      - type: bind
+        source: ${HOMELAB_CA_ROOT:?set HOMELAB_CA_ROOT in .env}
+        target: /certs/homelab-root.crt
+        read_only: true
+        bind:
+          create_host_path: false
     extra_hosts:
       # Checks go straight to Caddy over homelab-proxy, not through the VM's
       # DNS or hairpin NAT. Keep in step with homelab-proxy's sites/.

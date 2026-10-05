@@ -85,7 +85,19 @@ test('Uptime Kuma keeps its data in a volume and verifies HTTPS against the home
     const kuma = service('uptime-kuma');
     assert.match(kuma, /^\s+- kuma_data:\/app\/data$/m);
     assert.match(kuma, /^\s+NODE_EXTRA_CA_CERTS: \/certs\/homelab-root\.crt$/m);
-    assert.match(kuma, /^\s+- \$\{HOMELAB_CA_ROOT[^}]*\}:\/certs\/homelab-root\.crt:ro$/m);
+});
+
+// The short `src:dst` form makes Docker create a missing source as a root-owned
+// directory: Node then ignores the CA and every HTTPS monitor fails quietly.
+test('Uptime Kuma refuses to start when the CA file is missing', () => {
+    assert.match(service('uptime-kuma'), new RegExp([
+        String.raw`^ {6}- type: bind`,
+        String.raw` {8}source: \$\{HOMELAB_CA_ROOT:\?[^}]*\}`,
+        String.raw` {8}target: /certs/homelab-root\.crt`,
+        String.raw` {8}read_only: true`,
+        String.raw` {8}bind:`,
+        String.raw` {10}create_host_path: false$`,
+    ].join('\n'), 'm'));
 });
 
 test('Uptime Kuma resolves every lab site to Caddy', () => {
@@ -167,6 +179,14 @@ test('the deploy guide covers the steps a first deployment needs', () => {
         'Trust Proxy', 'Discord', 'slug `lab`', 'lab-status_kuma_data', 'docker stop']) {
         assert.ok(guide.includes(needle), `docs/DEPLOY.md does not mention ${needle}`);
     }
+});
+
+test('the deploy guide checks the CA file and claims the Kuma admin account at once', () => {
+    const guide = read('docs/DEPLOY.md');
+    assert.ok(guide.includes('test -f "$HOMELAB_CA_ROOT"') || guide.includes('test -f /usr/local/share/ca-certificates/homelab-proxy-root.crt'),
+        'DEPLOY.md must check the CA file exists before starting');
+    assert.ok(guide.includes('ssh -L 3001:'), 'DEPLOY.md must offer the SSH-tunnel first run');
+    assert.match(guide, /straight away/, 'DEPLOY.md must say to finish Kuma setup straight away');
 });
 
 // homelab-proxy from HOMELAB_PROXY_DIR, else the nearest sibling checkout.
