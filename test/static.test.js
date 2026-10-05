@@ -169,4 +169,43 @@ test('the deploy guide covers the steps a first deployment needs', () => {
     }
 });
 
+// homelab-proxy from HOMELAB_PROXY_DIR, else the nearest sibling checkout.
+function homelabProxyDir() {
+    if (process.env.HOMELAB_PROXY_DIR) return path.resolve(process.env.HOMELAB_PROXY_DIR);
+    for (let dir = path.dirname(ROOT); dir !== path.dirname(dir); dir = path.dirname(dir)) {
+        const candidate = path.join(dir, 'homelab-proxy');
+        if (fs.existsSync(path.join(candidate, 'Caddyfile'))) return candidate;
+    }
+    return null;
+}
+const PROXY = homelabProxyDir();
+const skipProxy = PROXY ? false : 'homelab-proxy checkout not found';
+const proxyRead = (file) => fs.readFileSync(path.join(PROXY, file), 'utf8').replace(/\r/g, '');
+const proxySites = () => fs.readdirSync(path.join(PROXY, 'sites')).filter((f) => f.endsWith('.caddy'))
+    .flatMap((f) => [...proxyRead(`sites/${f}`).matchAll(/^([a-z0-9-]+)\.\{\$LAB_DOMAIN\}\s*\{$/gm)].map((m) => m[1]));
+
+test('homelab-proxy routes status and home to these services', { skip: skipProxy }, () => {
+    assert.match(proxyRead('sites/status.caddy'), /^status\.\{\$LAB_DOMAIN\} \{\n\timport common\n\treverse_proxy uptime-kuma:3001\n\}$/m);
+    assert.match(proxyRead('sites/home.caddy'), /^home\.\{\$LAB_DOMAIN\} \{\n\timport common\n\treverse_proxy homepage:3000\n\}$/m);
+});
+
+test('Uptime Kuma resolves exactly the sites homelab-proxy serves', { skip: skipProxy }, () => {
+    assert.deepEqual(KUMA_HOSTS().sort(), proxySites().sort());
+});
+
+test('Caddy accepts Uptime Kuma checks from the proxy network', { skip: skipProxy }, () => {
+    const proxyEnv = envFile(path.join(PROXY, '.env.example'));
+    assert.equal(envExample().PROXY_CADDY_IP, proxyEnv.PROXY_CADDY_IP, 'PROXY_CADDY_IP differs from homelab-proxy');
+    const toInt = (ip) => ip.split('.').reduce((n, part) => n * 256 + Number(part), 0) >>> 0;
+    const parse = (cidr) => { const [base, bits] = cidr.split('/'); return { base: toInt(base), bits: Number(bits) }; };
+    const within = (inner, outer) => {
+        const mask = outer.bits === 0 ? 0 : (2 ** 32 - 2 ** (32 - outer.bits)) >>> 0;
+        return outer.bits <= inner.bits && ((inner.base & mask) >>> 0) === ((outer.base & mask) >>> 0);
+    };
+    const subnet = parse(proxyEnv.PROXY_SUBNET);
+    const allowed = proxyEnv.LAB_ALLOWED_CIDRS.split(/\s+/).filter(Boolean).map(parse);
+    assert.ok(allowed.some((cidr) => within(subnet, cidr)),
+        `LAB_ALLOWED_CIDRS must include PROXY_SUBNET ${proxyEnv.PROXY_SUBNET}, or Caddy refuses Uptime Kuma's checks`);
+});
+
 module.exports = { ROOT, read, code, block, service, envFile, envExample, KUMA_HOSTS };
