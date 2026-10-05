@@ -1,0 +1,92 @@
+name: lab-status
+
+# Start after homelab-proxy: its stack creates the external homelab-proxy
+# network these apps join. See docs/DEPLOY.md.
+x-logging: &logging
+  driver: json-file
+  options: {max-size: "10m", max-file: "3"}
+
+services:
+  socket-proxy:
+    image: lscr.io/linuxserver/socket-proxy:3.4.6-r0-ls100
+    restart: unless-stopped
+    environment:
+      # Read-only container queries. Every other Docker API family stays off.
+      CONTAINERS: "1"
+      POST: "0"
+    volumes:
+      # The only service that touches the socket.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    read_only: true
+    tmpfs: [/run]
+    security_opt: ["no-new-privileges:true"]
+    networks: [socket]
+    logging: *logging
+    deploy:
+      resources:
+        limits: {memory: 64M}
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:2.5.5
+    restart: unless-stopped
+    environment:
+      # Caddy's internal CA, so HTTPS monitors verify certificates.
+      NODE_EXTRA_CA_CERTS: /certs/homelab-root.crt
+    volumes:
+      # Database, monitors, admin account and Discord webhook: back it up.
+      - kuma_data:/app/data
+      - ${HOMELAB_CA_ROOT:?set HOMELAB_CA_ROOT in .env}:/certs/homelab-root.crt:ro
+    extra_hosts:
+      # Checks go straight to Caddy over homelab-proxy, not through the VM's
+      # DNS or hairpin NAT. Keep in step with homelab-proxy's sites/.
+      - "dashboard.${LAB_DOMAIN:?set LAB_DOMAIN in .env}:${PROXY_CADDY_IP:?set PROXY_CADDY_IP in .env}"
+      - "foundry.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "home.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "nettools.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "npc-import.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "sillytavern.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "st-uplink.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "status.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+    security_opt: ["no-new-privileges:true"]
+    networks:
+      default: {}
+      socket: {}
+      proxy:
+        aliases: [uptime-kuma]
+    logging: *logging
+    deploy:
+      resources:
+        limits: {memory: 512M}
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:v2.4.0
+    restart: unless-stopped
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: home.${LAB_DOMAIN:?set LAB_DOMAIN in .env}
+      # Used as {{HOMEPAGE_VAR_LAB_DOMAIN}} in config/services.yaml.
+      HOMEPAGE_VAR_LAB_DOMAIN: ${LAB_DOMAIN}
+      # The config mount is read-only, so logs go to stdout only.
+      LOG_TARGETS: stdout
+    volumes:
+      - ./config:/app/config:ro
+    security_opt: ["no-new-privileges:true"]
+    networks:
+      default: {}
+      socket: {}
+      proxy:
+        aliases: [homepage]
+    logging: *logging
+    deploy:
+      resources:
+        limits: {memory: 256M}
+
+networks:
+  # Docker API traffic only: unreachable from Caddy and from outside.
+  socket:
+    internal: true
+  proxy:
+    name: homelab-proxy
+    external: true
+
+volumes:
+  kuma_data:

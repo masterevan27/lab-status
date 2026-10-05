@@ -1,2 +1,6 @@
 .claude/worktrees/
 .env
+*.crt
+*.key
+*.pem
+*.tgz
