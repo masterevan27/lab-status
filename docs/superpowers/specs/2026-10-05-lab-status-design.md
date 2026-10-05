@@ -1,6 +1,6 @@
 # lab-status design
 
-Date: 2026-10-05. Status: approved in conversation, awaiting written-spec review.
+Date: 2026-10-05. Status: implemented in lab-status 0.1.0 and homelab-proxy 0.3.0; deployment on the VM pending (docs/DEPLOY.md).
 
 ## Goal
 
