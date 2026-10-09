@@ -25,3 +25,8 @@ The protocol is `G:\GIT-REPOS\ai-agent-dashboard\data\README.md`.
 ## Release versioning
 
 Read [`docs/VERSIONING.md`](docs/VERSIONING.md) before completing work.
+
+## Documentation
+
+Start with the [documentation bundle](docs/index.md). Follow the
+[OKF maintenance runbook](docs/OKF.md) when editing documentation.

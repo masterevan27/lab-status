@@ -1,3 +1,9 @@
+---
+type: Plan
+title: lab-status Implementation Plan
+description: Implementation sequence, dependencies and verification steps for
+  the private lab monitoring and service landing stack.
+---
 # lab-status Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

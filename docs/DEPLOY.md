@@ -1,3 +1,9 @@
+---
+type: Runbook
+title: Deploy on the lab VM
+description: Deploy the lab monitoring stack and configure first-run access,
+  monitors, alerts and backups.
+---
 # Deploy on the lab VM
 
 Run these on the VM that hosts homelab-proxy (Docker Engine, Compose 2.24.4 or

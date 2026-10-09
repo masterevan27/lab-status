@@ -1,3 +1,9 @@
+---
+type: Reference
+title: Versioning
+description: Authoritative release version source and project-specific version
+  change procedure.
+---
 # Versioning
 
 - The root `VERSION` file is the single source of truth.

@@ -1,4 +1,13 @@
+---
+type: Reference
+title: Changelog
+description: Recorded project releases and the changes included in each release.
+---
 # Changelog
+
+## 0.1.1 — 2026-10-05
+
+- Adopt the pinned OKF documentation profile, metadata, indexes and dedicated CI check.
 
 ## 0.1.0 — 2026-10-05
 

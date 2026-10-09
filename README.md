@@ -37,3 +37,8 @@ node --test test/
 ```
 
 Node 20+ only. The version is in `VERSION` ([docs/VERSIONING.md](docs/VERSIONING.md)).
+
+## Documentation
+
+Start with the [documentation bundle](docs/index.md). Follow the
+[OKF maintenance runbook](docs/OKF.md) when editing documentation.

@@ -1,3 +1,9 @@
+---
+type: Design
+title: lab-status design
+description: Design goals, architecture and constraints for the private lab
+  monitoring and service landing stack.
+---
 # lab-status design
 
 Date: 2026-10-05. Status: implemented in lab-status 0.1.0 and homelab-proxy 0.3.0; deployment on the VM pending (docs/DEPLOY.md).
