@@ -1,8 +1,7 @@
 # One tile per lab app. `server: lab` with `container:` adds live status, CPU
 # and memory. Names are Compose's <project>-<service>-1; confirm them with
 # `docker ps` on the VM (docs/DEPLOY.md). Foundry, SillyTavern and NPC import
-# get their container: lines at deploy time: their compose files exist only on
-# the VM.
+# use the explicit names confirmed on sfdockerhost1.
 - Lab apps:
     - Network tools:
         href: https://nettools.{{HOMEPAGE_VAR_LAB_DOMAIN}}
@@ -20,14 +19,20 @@
         href: https://foundry.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: Foundry v13
         icon: mdi-dice-d20
+        server: lab
+        container: foundry-v13
     - SillyTavern:
         href: https://sillytavern.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: SillyTavern and its Foundry uplink
         icon: mdi-chat
+        server: lab
+        container: sillytavern
     - NPC import:
         href: https://npc-import.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: lancer-npc-import-gui
         icon: mdi-account-arrow-down
+        server: lab
+        container: lancer-import-gui
 
 - Infrastructure:
     - Uptime Kuma:

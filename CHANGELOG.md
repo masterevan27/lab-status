@@ -5,6 +5,12 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 0.1.3 — 2026-10-09
+
+- Keep Homepage's light/dark and color controls available by leaving theme and color unset.
+- Add the confirmed Foundry, SillyTavern and NPC import container names for live statistics.
+- Update deployment instructions to match the verified VM configuration.
+
 ## 0.1.2 — 2026-10-09
 
 - Use checkout v7, setup-node v7 and Node 24 for CI.

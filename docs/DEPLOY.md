@@ -36,9 +36,9 @@ docker ps --format '{{.Names}}' | sort
 Compare the list with `config/services.yaml`:
 
 - Fix any `container:` name that differs.
-- Foundry, SillyTavern and NPC import ship without `container:` because their
-  compose files live only on the VM. Add `server: lab` and `container: <name>`
-  under each.
+- Foundry, SillyTavern and NPC import use the names confirmed on sfdockerhost1:
+  `foundry-v13`, `sillytavern` and `lancer-import-gui`. Update them if your VM
+  uses different names.
 
 Commit those edits so the repository matches the VM.
 
@@ -69,7 +69,8 @@ Open `https://status.<LAB_DOMAIN>`:
 1. Choose **SQLite** and create the admin account. Keep the password in your
    password manager. Reload the page: it must now show the login page, not
    the setup page.
-2. **Settings → Reverse Proxy → Trust Proxy: Yes.**
+2. Leave **Trust Proxy** disabled unless you have reviewed the trusted-proxy
+   scope. Monitoring works with it disabled in the current deployment.
 3. **Settings → Docker Hosts → Setup Docker Host:** name `lab`, connection type
    **TCP / HTTP**, daemon `tcp://socket-proxy:2375`. Use **Test**.
 4. **Settings → Notifications → Setup Notification:** type **Discord**, paste
@@ -92,6 +93,11 @@ Open `https://status.<LAB_DOMAIN>`:
 
    `st-uplink` is a plugin listener without a page of its own; the SillyTavern
    container monitor covers it.
+   On sfdockerhost1, SillyTavern's whitelist rejects the checker with `403`.
+   Its HTTP keyword monitor accepts only `403` and requires `config.yaml` in
+   the expected whitelist-denial page; the Docker monitor checks container
+   health. This verifies the access gate, not an authenticated application page.
+   Keep TLS verification enabled and preserve the whitelist.
 6. **Status Pages → New Status Page:** name `Lab`, slug `lab`. Add the HTTP(s)
    monitors and save. Homepage's Uptime Kuma tile reads this page.
 
@@ -99,6 +105,9 @@ Open `https://status.<LAB_DOMAIN>`:
 
 - `https://home.<LAB_DOMAIN>` shows every tile. Container tiles show running
   with CPU and memory, and the Uptime Kuma tile shows up/down counts.
+- Theme and color controls are in the Homepage footer and use browser-local
+  preferences. Leave `theme` and `color` unset in `config/settings.yaml` to
+  keep those controls available, then refresh the page after configuration changes.
 - Alert test: `docker stop nettools-web-1`. Within about two minutes Discord
   shows the monitor down. `docker start nettools-web-1` and Discord shows it up.
 

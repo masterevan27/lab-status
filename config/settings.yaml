@@ -1,7 +1,6 @@
 # Homepage settings: https://gethomepage.dev/configs/settings/
 title: Lab
-theme: dark
-color: slate
+# Leave theme and color unset so the browser controls remain available.
 headerStyle: clean
 hideVersion: true
 layout:
