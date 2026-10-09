@@ -9,6 +9,8 @@ This project uses house profile 1.0.0 and OKF 0.2. The repository-owned
 [profile](../.okf/tools/profile.md) and [lock](../.okf/tools/profile.json) define
 the pinned policy; `.okf/tools` contains its self-contained runtime snapshot.
 
+CI uses `actions/checkout@v7`, `actions/setup-node@v7` and Node 24.
+
 ## Install and validate
 
 From the repository root with Node 20.19 or later:
