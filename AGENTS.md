@@ -10,7 +10,7 @@ The protocol is `G:\GIT-REPOS\ai-agent-dashboard\data\README.md`.
 
 ## Working in this repository
 
-- Run `node --test test/`. Set `HOMELAB_PROXY_DIR` to a homelab-proxy checkout
+- Run `node --test "test/*.test.js"`. Set `HOMELAB_PROXY_DIR` to a homelab-proxy checkout
   (for example a worktree) to run the cross-repo checks against it; otherwise
   they use the nearest sibling `homelab-proxy` folder, or skip.
 - Keep the YAML plainly formatted (two-space indents, one key per line): the

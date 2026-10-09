@@ -33,7 +33,7 @@ first run, monitors, the alert test and backups.
 ## Test
 
 ```sh
-node --test test/
+node --test "test/*.test.js"
 ```
 
 Node 20+ only. The version is in `VERSION` ([docs/VERSIONING.md](docs/VERSIONING.md)).
