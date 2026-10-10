@@ -5,6 +5,10 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 0.1.5 — 2026-10-10
+
+- Document setting the Lab status page's Heartbeat Bar Days to 1 so it defaults to the last 24 hours.
+
 ## 0.1.4 — 2026-10-09
 
 - Document the test command as `node --test "test/*.test.js"`; the directory form fails on Node 22.

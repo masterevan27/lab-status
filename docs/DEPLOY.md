@@ -100,6 +100,10 @@ Open `https://status.<LAB_DOMAIN>`:
    Keep TLS verification enabled and preserve the whitelist.
 6. **Status Pages → New Status Page:** name `Lab`, slug `lab`. Add the HTTP(s)
    monitors and save. Homepage's Uptime Kuma tile reads this page.
+   Then edit the page and set **Heartbeat Bar Days** to `1` so it opens on the
+   last 24 hours, and save. Kuma has no visitor-selectable range; this admin
+   setting lives in `kuma_data`, so restore it with the backup. If the field is
+   missing or capped differently on this Kuma version, note the actual behavior here.
 
 ## 5. Check
 
