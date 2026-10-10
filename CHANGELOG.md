@@ -5,9 +5,12 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
-## 0.1.5 — 2026-10-10
+## 1.0.0 — 2026-10-10
 
-- Document setting the Lab status page's Heartbeat Bar Days to 1 so it defaults to the last 24 hours.
+- Build Uptime Kuma from a fork that adds an **Uptime range** selector to the
+  status page (24 hours by default; 7 days, 30 days or 1 year), pending
+  upstream issue #986. Needs the fork checkout at `KUMA_SRC` and
+  `docker compose build uptime-kuma` on the VM.
 
 ## 0.1.4 — 2026-10-09
 

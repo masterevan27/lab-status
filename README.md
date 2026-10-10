@@ -24,6 +24,7 @@ On the VM, after homelab-proxy 0.3.0 or later:
 
 ```sh
 cp .env.example .env
+docker compose build uptime-kuma   # from the fork checkout: see docs/DEPLOY.md
 docker compose up -d
 ```
 

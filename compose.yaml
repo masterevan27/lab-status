@@ -27,7 +27,13 @@ services:
         limits: {memory: 64M}
 
   uptime-kuma:
-    image: louislam/uptime-kuma:2.5.5
+    # Built from a fork that adds the status page uptime-range selector
+    # (uptime-kuma issue #986) until upstream ships it. See docs/DEPLOY.md.
+    image: lab-status/uptime-kuma:2.5.5-range.1
+    build:
+      context: kuma
+      additional_contexts:
+        src: ${KUMA_SRC:-../uptime-kuma}
     restart: unless-stopped
     environment:
       # Caddy's internal CA, so HTTPS monitors verify certificates.

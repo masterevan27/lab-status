@@ -74,6 +74,15 @@ test('every image is pinned to a version tag', () => {
     for (const image of images) assert.match(image, /:v?\d[\w.-]*$/, `${image} is not pinned to a version`);
 });
 
+// Until upstream ships the status page uptime-range selector, Uptime Kuma is
+// built from the fork checkout with the Dockerfile kept here.
+test('Uptime Kuma is built from the fork checkout with the local Dockerfile', () => {
+    const kuma = service('uptime-kuma');
+    assert.match(kuma, /^ {4}image: lab-status\/uptime-kuma:\d[\w.-]*-range\.\d+$/m);
+    assert.match(kuma, /^ {4}build:\n {6}context: kuma\n {6}additional_contexts:\n {8}src: \$\{KUMA_SRC:-\.\.\/uptime-kuma\}$/m);
+    assert.ok(fs.existsSync(path.join(ROOT, 'kuma', 'Dockerfile')), 'kuma/Dockerfile is missing');
+});
+
 test('.env.example documents every variable compose.yaml uses', () => {
     const documented = Object.keys(envExample());
     const used = new Set([...code('compose.yaml').matchAll(/\$\{([A-Z_]+)/g)].map((m) => m[1]));

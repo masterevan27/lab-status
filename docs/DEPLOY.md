@@ -26,6 +26,9 @@ later), in this repository's checkout.
   ```
 
   Compose refuses to start Uptime Kuma if the file is missing.
+- A checkout of the Uptime Kuma fork, branch `feat/status-page-time-range`,
+  next to this repository as `../uptime-kuma`, or at the path set in `KUMA_SRC`.
+  Compose builds Uptime Kuma from it: see [Uptime Kuma image](#uptime-kuma-image).
 
 ## 2. Confirm container names
 
@@ -45,7 +48,8 @@ Commit those edits so the repository matches the VM.
 ## 3. Start
 
 ```sh
-cp .env.example .env          # check LAB_DOMAIN, PROXY_CADDY_IP, HOMELAB_CA_ROOT
+cp .env.example .env          # check LAB_DOMAIN, PROXY_CADDY_IP, HOMELAB_CA_ROOT, KUMA_SRC
+docker compose build uptime-kuma   # several minutes: npm install and frontend build
 docker compose up -d
 docker compose ps             # three services running; uptime-kuma and homepage healthy
 docker compose logs homepage | tail -n 20
@@ -100,10 +104,9 @@ Open `https://status.<LAB_DOMAIN>`:
    Keep TLS verification enabled and preserve the whitelist.
 6. **Status Pages → New Status Page:** name `Lab`, slug `lab`. Add the HTTP(s)
    monitors and save. Homepage's Uptime Kuma tile reads this page.
-   Then edit the page and set **Heartbeat Bar Days** to `1` so it opens on the
-   last 24 hours, and save. Kuma has no visitor-selectable range; this admin
-   setting lives in `kuma_data`, so restore it with the backup. If the field is
-   missing or capped differently on this Kuma version, note the actual behavior here.
+   The page shows each monitor's uptime over the range picked in the
+   **Uptime range** selector above the list: 24 hours when first opened, or
+   7 days, 30 days or 1 year. The browser remembers the choice per page.
 
 ## 5. Check
 
@@ -140,10 +143,28 @@ Homepage has no state: its configuration is this repository.
 
 ## Upgrade
 
-Back up `kuma_data`, change the image tag in `compose.yaml`, bump `VERSION` and
-`CHANGELOG.md`, then:
+Back up `kuma_data`. Uptime Kuma is built from the fork, so rebase its
+`feat/status-page-time-range` branch onto the new upstream tag, change the
+local tag in `compose.yaml` (`2.5.5-range.1` becomes `<tag>-range.1`), bump
+`VERSION` and `CHANGELOG.md`, then:
 
 ```sh
-docker compose pull
+docker compose pull --ignore-buildable
+docker compose build uptime-kuma
 docker compose up -d
 ```
+
+Once an upstream release includes the selector, set `image:` back to
+`louislam/uptime-kuma:<tag>`, drop `build:` and `kuma/Dockerfile`, and remove
+`KUMA_SRC`.
+
+## Uptime Kuma image
+
+Upstream Uptime Kuma shows only the 24-hour uptime on a status page and has no
+range control ([uptime-kuma#986](https://github.com/louislam/uptime-kuma/issues/986)).
+`kuma/Dockerfile` builds the image from a fork checkout instead: the `src`
+build context in `compose.yaml`, `KUMA_SRC`, default `../uptime-kuma`. The
+fork's `feat/status-page-time-range` branch is upstream 2.5.5 plus one commit
+that adds the selector and is meant to become an upstream pull request. The
+Dockerfile mirrors the release stage of upstream's `docker/dockerfile` and adds
+the frontend build that upstream's release pipeline runs beforehand.
