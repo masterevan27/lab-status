@@ -5,6 +5,12 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.1.0 — 2026-10-10
+
+- The status page's uptime range selector gains 1, 3 and 5 hours, and the
+  heartbeat bar now covers the chosen range instead of the last 100 checks
+  (image `2.5.5-range.2`).
+
 ## 1.0.0 — 2026-10-10
 
 - Build Uptime Kuma from a fork that adds an **Uptime range** selector to the

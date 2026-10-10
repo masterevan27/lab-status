@@ -104,9 +104,11 @@ Open `https://status.<LAB_DOMAIN>`:
    Keep TLS verification enabled and preserve the whitelist.
 6. **Status Pages → New Status Page:** name `Lab`, slug `lab`. Add the HTTP(s)
    monitors and save. Homepage's Uptime Kuma tile reads this page.
-   The page shows each monitor's uptime over the range picked in the
-   **Uptime range** selector above the list: 24 hours when first opened, or
-   7 days, 30 days or 1 year. The browser remembers the choice per page.
+   The **Uptime range** selector above the list sets both the uptime
+   percentage and the heartbeat bar: 24 hours when first opened, or 1, 3 or
+   5 hours, 7 days, 30 days or 1 year. The bar shows the range as equal
+   buckets; a yellow bucket had both up and down checks, and its tooltip
+   gives the counts. The browser remembers the choice per page.
 
 ## 5. Check
 
@@ -145,7 +147,7 @@ Homepage has no state: its configuration is this repository.
 
 Back up `kuma_data`. Uptime Kuma is built from the fork, so rebase its
 `feat/status-page-time-range` branch onto the new upstream tag, change the
-local tag in `compose.yaml` (`2.5.5-range.1` becomes `<tag>-range.1`), bump
+local tag in `compose.yaml` (`2.5.5-range.2` becomes `<tag>-range.1`), bump
 `VERSION` and `CHANGELOG.md`, then:
 
 ```sh
@@ -164,7 +166,7 @@ Upstream Uptime Kuma shows only the 24-hour uptime on a status page and has no
 range control ([uptime-kuma#986](https://github.com/louislam/uptime-kuma/issues/986)).
 `kuma/Dockerfile` builds the image from a fork checkout instead: the `src`
 build context in `compose.yaml`, `KUMA_SRC`, default `../uptime-kuma`. The
-fork's `feat/status-page-time-range` branch is upstream 2.5.5 plus one commit
-that adds the selector and is meant to become an upstream pull request. The
+fork's `feat/status-page-time-range` branch is upstream 2.5.5 plus the commits
+that add the selector and are meant to become an upstream pull request. The
 Dockerfile mirrors the release stage of upstream's `docker/dockerfile` and adds
 the frontend build that upstream's release pipeline runs beforehand.
