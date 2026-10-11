@@ -5,6 +5,12 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.1.1 — 2026-10-11
+
+- The Agent dashboard tile reads live status from container
+  `ai-agent-dashboard`, its name from ai-agent-dashboard 0.8.10 on (previously
+  `docker-dashboard-1`).
+
 ## 1.1.0 — 2026-10-10
 
 - The status page's uptime range selector gains 1, 3 and 5 hours, and the

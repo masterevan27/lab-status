@@ -14,7 +14,7 @@
         description: ai-agent-dashboard
         icon: mdi-view-dashboard
         server: lab
-        container: docker-dashboard-1
+        container: ai-agent-dashboard
     - Foundry VTT:
         href: https://foundry.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: Foundry v13
