@@ -33,6 +33,12 @@
         icon: mdi-account-arrow-down
         server: lab
         container: lancer-import-gui
+    - Network map:
+        href: https://netmap.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: network-scan-and-map
+        icon: mdi-sitemap
+        server: lab
+        container: netmap
 
 - Infrastructure:
     - Uptime Kuma:

@@ -93,6 +93,7 @@ Open `https://status.<LAB_DOMAIN>`:
    | sillytavern | HTTP(s) | `https://sillytavern.<LAB_DOMAIN>/` |
    | npc-import | HTTP(s) | `https://npc-import.<LAB_DOMAIN>/` |
    | home | HTTP(s) | `https://home.<LAB_DOMAIN>/` |
+   | netmap | HTTP(s) | `https://netmap.<LAB_DOMAIN>/` |
    | each container from step 2 except `lab-status-uptime-kuma-1` | Docker Container | its name, Docker host `lab` |
 
    `st-uplink` is a plugin listener without a page of its own; the SillyTavern

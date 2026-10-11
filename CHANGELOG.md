@@ -5,6 +5,14 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.2.0 — 2026-10-11
+
+- Add network-scan-and-map, served by homelab-proxy at `netmap.<LAB_DOMAIN>`:
+  Uptime Kuma resolves the site to Caddy, Homepage gains a **Network map**
+  tile with live container status, and the deploy guide lists its HTTP(s)
+  and Docker container monitors. Recreate Uptime Kuma to apply the host entry,
+  then add the two monitors and put the HTTP(s) one on the `Lab` status page.
+
 ## 1.1.1 — 2026-10-11
 
 - The Agent dashboard tile reads live status from container

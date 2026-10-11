@@ -54,6 +54,7 @@ services:
       - "dashboard.${LAB_DOMAIN:?set LAB_DOMAIN in .env}:${PROXY_CADDY_IP:?set PROXY_CADDY_IP in .env}"
       - "foundry.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "home.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "netmap.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "nettools.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "npc-import.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "sillytavern.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
