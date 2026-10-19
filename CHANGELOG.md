@@ -5,6 +5,10 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.2.1 — 2026-10-18
+
+- Ignore local `.obsidian/` editor settings in Git.
+
 ## 1.2.0 — 2026-10-11
 
 - Add network-scan-and-map, served by homelab-proxy at `netmap.<LAB_DOMAIN>`:

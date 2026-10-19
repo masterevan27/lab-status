@@ -5,3 +5,6 @@
 *.pem
 *.tgz
 *.swp
+
+# Local Obsidian settings
+.obsidian/
