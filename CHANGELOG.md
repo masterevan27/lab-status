@@ -5,6 +5,14 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.2.3 — 2026-10-20
+
+- Monitor the agent dashboard at `/api/ready` (ai-agent-dashboard 0.11.1 or
+  later) instead of its page, accepting only `200-299`. The page kept
+  answering while the dashboard couldn't rebuild its data, so an outage looked
+  up. Upgrade the dashboard, then edit the existing `dashboard` monitor's URL
+  and accepted codes in Uptime Kuma.
+
 ## 1.2.2 — 2026-10-20
 
 - Record OKF lifecycle, tags, provenance, code sources and review deadlines in

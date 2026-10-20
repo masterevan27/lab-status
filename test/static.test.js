@@ -185,7 +185,9 @@ test('VERSION matches the newest CHANGELOG entry', () => {
 test('the deploy guide covers the steps a first deployment needs', () => {
     const guide = read('docs/DEPLOY.md');
     for (const needle of ['LAB_ALLOWED_CIDRS', "docker ps --format '{{.Names}}'", 'tcp://socket-proxy:2375',
-        'Trust Proxy', 'Discord', 'slug `lab`', 'lab-status_kuma_data', 'docker stop']) {
+        'Trust Proxy', 'Discord', 'slug `lab`', 'lab-status_kuma_data', 'docker stop',
+        // The dashboard's page answers even when its state is broken; only /api/ready reports that.
+        'https://dashboard.<LAB_DOMAIN>/api/ready']) {
         assert.ok(guide.includes(needle), `docs/DEPLOY.md does not mention ${needle}`);
     }
 });

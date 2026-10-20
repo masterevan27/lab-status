@@ -29,7 +29,7 @@ sources:
     title: Configuration consistency tests
 generated:
   by: claude-code/claude-opus-5-5
-  at: 2026-10-11T17:13:44Z
+  at: 2026-10-20T23:24:17Z
 stale_after: 2027-01-09T00:00:00Z
 ---
 # Deploy on the lab VM
@@ -116,13 +116,24 @@ Open `https://status.<LAB_DOMAIN>`:
    | Name | Type | Target |
    |---|---|---|
    | nettools | HTTP(s) | `https://nettools.<LAB_DOMAIN>/` |
-   | dashboard | HTTP(s) | `https://dashboard.<LAB_DOMAIN>/` |
+   | dashboard | HTTP(s) | `https://dashboard.<LAB_DOMAIN>/api/ready` (accepted `200-299` only) |
    | foundry | HTTP(s) | `https://foundry.<LAB_DOMAIN>/` |
    | sillytavern | HTTP(s) | `https://sillytavern.<LAB_DOMAIN>/` |
    | npc-import | HTTP(s) | `https://npc-import.<LAB_DOMAIN>/` |
    | home | HTTP(s) | `https://home.<LAB_DOMAIN>/` |
    | netmap | HTTP(s) | `https://netmap.<LAB_DOMAIN>/` |
    | each container from step 2 except `lab-status-uptime-kuma-1` | Docker Container | its name, Docker host `lab` |
+
+   The dashboard's page and `/api/version` keep answering 200 even when it
+   can't rebuild its project state from its event log. In that state every
+   project request fails, so an outage would look up. `/api/ready`
+   (ai-agent-dashboard 0.11.1 or later) needs no sign-in and returns 503
+   `{"ok":false}` in that case. Keep its accepted codes at `200-299`, not the
+   default `200-399` or `401`, and don't add an API token: the URL is public
+   by design and reveals only that one flag. On an older dashboard the URL
+   returns `401`, so upgrade the dashboard before switching an existing
+   monitor (**Edit** the `dashboard` monitor, change the URL and accepted
+   codes, **Save**).
 
    `st-uplink` is a plugin listener without a page of its own; the SillyTavern
    container monitor covers it.
@@ -146,6 +157,9 @@ Open `https://status.<LAB_DOMAIN>`:
 - Theme and color controls are in the Homepage footer and use browser-local
   preferences. Leave `theme` and `color` unset in `config/settings.yaml` to
   keep those controls available, then refresh the page after configuration changes.
+- `curl -sS https://dashboard.<LAB_DOMAIN>/api/ready` prints `{"ok":true}`,
+  and the `dashboard` monitor is up. Any other answer means the dashboard
+  can't rebuild its state, or is older than 0.11.1.
 - Alert test: `docker stop nettools-web-1`. Within about two minutes Discord
   shows the monitor down. `docker start nettools-web-1` and Discord shows it up.
 
