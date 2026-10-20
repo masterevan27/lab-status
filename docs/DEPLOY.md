@@ -3,6 +3,34 @@ type: Runbook
 title: Deploy on the lab VM
 description: Deploy the lab monitoring stack and configure first-run access,
   monitors, alerts and backups.
+status: stable
+tags:
+  - deployment
+  - monitoring
+  - operations
+sources:
+  - id: compose
+    resource: https://github.com/masterevan27/lab-status/blob/2ac1179c0547b8934fc97fb2765cffafac5d18ce/compose.yaml
+    title: Uptime Kuma, Homepage and socket proxy services
+  - id: env-example
+    resource: https://github.com/masterevan27/lab-status/blob/2ac1179c0547b8934fc97fb2765cffafac5d18ce/.env.example
+    title: Deployment environment variables
+  - id: services
+    resource: https://github.com/masterevan27/lab-status/blob/2ac1179c0547b8934fc97fb2765cffafac5d18ce/config/services.yaml
+    title: Homepage tiles and container names
+  - id: settings
+    resource: https://github.com/masterevan27/lab-status/blob/2ac1179c0547b8934fc97fb2765cffafac5d18ce/config/settings.yaml
+    title: Homepage settings
+  - id: kuma-dockerfile
+    resource: https://github.com/masterevan27/lab-status/blob/2ac1179c0547b8934fc97fb2765cffafac5d18ce/kuma/Dockerfile
+    title: Uptime Kuma fork image build
+  - id: static-test
+    resource: https://github.com/masterevan27/lab-status/blob/2ac1179c0547b8934fc97fb2765cffafac5d18ce/test/static.test.js
+    title: Configuration consistency tests
+generated:
+  by: claude-code/claude-opus-5-5
+  at: 2026-10-11T17:13:44Z
+stale_after: 2027-01-09T00:00:00Z
 ---
 # Deploy on the lab VM
 

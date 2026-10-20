@@ -5,6 +5,13 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.2.2 — 2026-10-20
+
+- Record OKF lifecycle, tags, provenance, code sources and review deadlines in
+  every documentation concept, and adopt house profile 1.1.0, which warns when
+  provenance, runbook sources or review deadlines are missing. No document is
+  marked verified.
+
 ## 1.2.1 — 2026-10-18
 
 - Ignore local `.obsidian/` editor settings in Git.

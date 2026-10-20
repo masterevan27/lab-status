@@ -3,6 +3,13 @@ type: Plan
 title: lab-status Implementation Plan
 description: Implementation sequence, dependencies and verification steps for
   the private lab monitoring and service landing stack.
+status: stable
+tags:
+  - monitoring
+  - deployment
+generated:
+  by: claude-code/claude-opus-5-5
+  at: 2026-10-05T00:55:18-04:00
 ---
 # lab-status Implementation Plan
 

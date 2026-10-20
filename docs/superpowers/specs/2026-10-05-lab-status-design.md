@@ -3,6 +3,13 @@ type: Design
 title: lab-status design
 description: Design goals, architecture and constraints for the private lab
   monitoring and service landing stack.
+status: stable
+tags:
+  - monitoring
+  - architecture
+generated:
+  by: claude-code/claude-opus-5-5
+  at: 2026-10-05T01:13:04-04:00
 ---
 # lab-status design
 

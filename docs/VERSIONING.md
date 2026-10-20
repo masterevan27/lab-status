@@ -3,6 +3,24 @@ type: Reference
 title: Versioning
 description: Authoritative release version source and project-specific version
   change procedure.
+status: stable
+tags:
+  - documentation
+  - versioning
+sources:
+  - id: version
+    resource: ../VERSION
+    title: Machine-readable version source
+  - id: changelog
+    resource: ../CHANGELOG.md
+    title: Release changelog
+  - id: version-test
+    resource: ../test/static.test.js
+    title: VERSION and CHANGELOG agreement test
+generated:
+  by: claude-code/claude-sonnet-5-5
+  at: 2026-10-09T23:11:25Z
+stale_after: 2027-01-07T00:00:00Z
 ---
 # Versioning
 
