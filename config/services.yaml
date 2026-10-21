@@ -39,6 +39,12 @@
         icon: mdi-sitemap
         server: lab
         container: netmap
+    # PhotoPrism runs on its own VM (Proxmox2 VM 102), not on the lab Docker
+    # host, so its tile has no container status; Kuma monitors the site.
+    - PhotoPrism:
+        href: https://photoprism.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Photo and video library
+        icon: mdi-image-multiple
 
 - Infrastructure:
     - Uptime Kuma:

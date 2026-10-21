@@ -5,6 +5,13 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.3.0 — 2026-10-20
+
+- Add PhotoPrism (`photoprism.<LAB_DOMAIN>`, homelab-proxy 0.5.0): Uptime
+  Kuma resolves it to Caddy, Homepage has a PhotoPrism tile, and the deploy
+  guide lists its HTTP(s) monitor. It runs on its own VM, so neither the tile
+  nor Kuma has a container check for it.
+
 ## 1.2.3 — 2026-10-20
 
 - Monitor the agent dashboard at `/api/ready` (ai-agent-dashboard 0.11.1 or

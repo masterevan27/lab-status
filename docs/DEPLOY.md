@@ -29,7 +29,7 @@ sources:
     title: Configuration consistency tests
 generated:
   by: claude-code/claude-opus-5-5
-  at: 2026-10-20T23:24:17Z
+  at: 2026-10-21T03:05:00Z
 stale_after: 2027-01-09T00:00:00Z
 ---
 # Deploy on the lab VM
@@ -122,6 +122,7 @@ Open `https://status.<LAB_DOMAIN>`:
    | npc-import | HTTP(s) | `https://npc-import.<LAB_DOMAIN>/` |
    | home | HTTP(s) | `https://home.<LAB_DOMAIN>/` |
    | netmap | HTTP(s) | `https://netmap.<LAB_DOMAIN>/` |
+   | photoprism | HTTP(s) | `https://photoprism.<LAB_DOMAIN>/api/v1/status` (runs on its own VM, so it has no Docker Container monitor) |
    | each container from step 2 except `lab-status-uptime-kuma-1` | Docker Container | its name, Docker host `lab` |
 
    The dashboard's page and `/api/version` keep answering 200 even when it
