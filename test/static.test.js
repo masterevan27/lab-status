@@ -111,7 +111,7 @@ test('Uptime Kuma refuses to start when the CA file is missing', () => {
 
 test('Uptime Kuma resolves every lab site to Caddy', () => {
     assert.deepEqual(KUMA_HOSTS().sort(),
-        ['dashboard', 'foundry', 'home', 'netmap', 'nettools', 'npc-import', 'photoprism', 'sillytavern', 'st-uplink', 'status']);
+        ['dashboard', 'files', 'foundry', 'home', 'netmap', 'nettools', 'npc-import', 'photoprism', 'sillytavern', 'st-uplink', 'status']);
 });
 
 test('Homepage accepts only its proxied host name and reads config read-only', () => {

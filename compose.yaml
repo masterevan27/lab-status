@@ -52,6 +52,7 @@ services:
       # Checks go straight to Caddy over homelab-proxy, not through the VM's
       # DNS or hairpin NAT. Keep in step with homelab-proxy's sites/.
       - "dashboard.${LAB_DOMAIN:?set LAB_DOMAIN in .env}:${PROXY_CADDY_IP:?set PROXY_CADDY_IP in .env}"
+      - "files.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "foundry.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "home.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "netmap.${LAB_DOMAIN}:${PROXY_CADDY_IP}"

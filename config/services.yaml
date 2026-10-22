@@ -45,6 +45,12 @@
         href: https://photoprism.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: Photo and video library
         icon: mdi-image-multiple
+    # FileBrowser runs on the Raspberry Pi files.spiralfrenzy.com, not on the
+    # lab Docker host, so its tile has no container status; Kuma monitors it.
+    - FileBrowser:
+        href: https://files.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Files on the NAS drives
+        icon: mdi-folder-network
 
 - Infrastructure:
     - Uptime Kuma:

@@ -5,6 +5,13 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.4.0 — 2026-10-22
+
+- Add FileBrowser (`files.<LAB_DOMAIN>`, homelab-proxy 0.6.0): Uptime Kuma
+  resolves it to Caddy, Homepage has a FileBrowser tile, and the deploy guide
+  lists its HTTP(s) monitor. It runs on the Raspberry Pi files.spiralfrenzy.com,
+  so neither the tile nor Kuma has a container check for it.
+
 ## 1.3.0 — 2026-10-20
 
 - Add PhotoPrism (`photoprism.<LAB_DOMAIN>`, homelab-proxy 0.5.0): Uptime
