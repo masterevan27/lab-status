@@ -5,6 +5,11 @@ description: Recorded project releases and the changes included in each release.
 ---
 # Changelog
 
+## 1.4.1 — 2026-10-22
+
+- The deploy guide cites its sources at the 1.4.0 commit, which includes the
+  netmap, PhotoPrism and FileBrowser entries it describes. No behaviour change.
+
 ## 1.4.0 — 2026-10-22
 
 - Add FileBrowser (`files.<LAB_DOMAIN>`, homelab-proxy 0.6.0): Uptime Kuma
