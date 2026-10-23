@@ -1,10 +1,34 @@
-.claude/worktrees/
-.env
 *.crt
 *.key
 *.pem
 *.tgz
+
+# >>> shared baseline (same in every repo; edit project rules above) >>>
+# OS metadata
+.DS_Store
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Editor swap and backup files, JetBrains settings
 *.swp
+*.swo
+*~
+.idea/
 
 # Local Obsidian settings
 .obsidian/
+
+# Local agent state
+.claude/worktrees/
+.claude/settings.local.json
+
+# Private environment files (shareable examples stay tracked)
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.sample
+# <<< shared baseline <<<
