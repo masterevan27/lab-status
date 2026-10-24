@@ -2,8 +2,19 @@
 type: Reference
 title: Changelog
 description: Recorded project releases and the changes included in each release.
+generated:
+  by: codex/gpt-6.1-sol
+  at: 2026-10-24T20:56:39.682Z
+sources:
+  - id: readme-preview
+    resource: README.md
+    title: README deliverable preview
 ---
 # Changelog
+
+## 1.4.2 — 2026-10-24
+
+- Record the README capture requirements and blocker; the real product capture remains pending.
 
 ## 1.4.1 — 2026-10-22
 

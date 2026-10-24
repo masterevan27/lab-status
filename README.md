@@ -3,6 +3,12 @@
 A private ops view of the lab Docker VM, behind
 [homelab-proxy](../homelab-proxy):
 
+<!-- doc-media TODO
+Kind: Homepage and Uptime Kuma screenshots. Purpose: show the app launcher and monitoring views.
+Capture acceptance: use synthetic service names and status history, omit host addresses, personal app links and notification settings, record image versions and date.
+Blocker: no committed UI capture exists; apps run in the live Docker lab and this host has no Docker runtime for a disposable replica.
+-->
+
 | Site | App | What it shows |
 |---|---|---|
 | `status.<LAB_DOMAIN>` | Uptime Kuma | up/down and uptime history of every site and container; Discord alerts |
