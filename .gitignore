@@ -32,3 +32,4 @@ $RECYCLE.BIN/
 !.env.*.example
 !.env.sample
 # <<< shared baseline <<<
+/.obsidianignore
