@@ -3,14 +3,18 @@ type: Reference
 title: Changelog
 description: Recorded project releases and the changes included in each release.
 generated:
-  by: codex/gpt-6.1-sol
-  at: 2026-10-24T20:56:39.682Z
+  by: codex/unrecorded
+  at: 2026-10-25T23:23:30.085661Z
 sources:
   - id: readme-preview
     resource: README.md
     title: README deliverable preview
 ---
 # Changelog
+
+## 2.0.0 — 2026-10-25
+
+- Add the separate LibreNMS Docker stack, six network health/link/outage rules, Discord and direct Pixel delivery, and independent Kuma container checks. The new stack has its own environment variables and persistent volumes. Preserve the pending sanitized README preview and telemetry/rotation limits.
 
 ## 1.4.2 — 2026-10-24
 

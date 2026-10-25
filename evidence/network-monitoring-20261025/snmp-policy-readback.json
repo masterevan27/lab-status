@@ -1,0 +1,34 @@
+{
+  "10.8.30.1": {
+    "enabled": true,
+    "version": "v3",
+    "security": "authPriv",
+    "source": "10.8.30.29/32",
+    "write": false,
+    "public_read": false
+  },
+  "10.8.30.53": {
+    "enabled": true,
+    "version": "v3",
+    "security": "authPriv",
+    "source": "10.8.30.29/32",
+    "write": false,
+    "public_read": false
+  },
+  "10.8.30.71": {
+    "enabled": true,
+    "version": "v3",
+    "security": "authPriv",
+    "source": "10.8.30.29/32",
+    "write": false,
+    "public_read": false
+  },
+  "10.8.30.72": {
+    "enabled": true,
+    "version": "v3",
+    "security": "authPriv",
+    "source": "10.8.30.29/32",
+    "write": false,
+    "public_read": false
+  }
+}

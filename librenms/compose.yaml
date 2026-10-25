@@ -1,0 +1,104 @@
+name: librenms
+
+x-app: &app
+  image: lab-status/librenms:26.10.2-compat.1
+  build: .
+  restart: unless-stopped
+  cap_add: [NET_RAW]
+  environment: &app-env
+    TZ: America/New_York
+    PUID: "1000"
+    PGID: "1000"
+    DB_HOST: db
+    DB_NAME: librenms
+    DB_USER: librenms
+    DB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+    DB_TIMEOUT: "120"
+    CACHE_DRIVER: redis
+    SESSION_DRIVER: redis
+    REDIS_HOST: redis
+    APP_URL: https://librenms.${LAB_DOMAIN:?set LAB_DOMAIN in .env}
+    APP_TRUSTED_PROXIES: ${PROXY_CADDY_IP:-172.31.250.2}
+    MEMORY_LIMIT: 256M
+    FPM_PM_MAX_CHILDREN: "4"
+    FPM_PM_START_SERVERS: "1"
+    FPM_PM_MIN_SPARE_SERVERS: "1"
+    FPM_PM_MAX_SPARE_SERVERS: "2"
+  volumes:
+    - data:/data
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_started
+  networks: [backend]
+  logging:
+    driver: json-file
+    options: {max-size: "10m", max-file: "3"}
+
+services:
+  db:
+    image: mariadb:11.4.8
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: librenms
+      MARIADB_USER: librenms
+      MARIADB_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?set DB_ROOT_PASSWORD in .env}
+      TZ: America/New_York
+    command: ["--innodb-file-per-table=1", "--lower-case-table-names=0", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - db:/var/lib/mysql
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+    deploy:
+      resources:
+        limits: {memory: 768M}
+  redis:
+    image: redis:7.4.6-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--maxmemory", "96mb", "--maxmemory-policy", "noeviction"]
+    networks: [backend]
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+    deploy:
+      resources:
+        limits: {memory: 128M}
+  web:
+    <<: *app
+    hostname: librenms
+    networks:
+      backend: {}
+      proxy:
+        aliases: [librenms-web]
+    deploy:
+      resources:
+        limits: {memory: 1G}
+  dispatcher:
+    <<: *app
+    hostname: librenms-dispatcher
+    environment:
+      <<: *app-env
+      SIDECAR_DISPATCHER: "1"
+      DISPATCHER_NODE_ID: dispatcher1
+    deploy:
+      resources:
+        limits: {memory: 1G}
+
+networks:
+  backend: {}
+  proxy:
+    name: homelab-proxy
+    external: true
+
+volumes:
+  data:
+  db:

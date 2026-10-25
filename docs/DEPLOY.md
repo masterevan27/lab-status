@@ -9,6 +9,9 @@ tags:
   - monitoring
   - operations
 sources:
+  - id: network-monitoring-20261025
+    resource: LIBRENMS.md
+    title: LibreNMS deployment and evidence
   - id: compose
     resource: https://github.com/masterevan27/lab-status/blob/a185faa71074af7b8d702fa93d57f7c934c65b33/compose.yaml
     title: Uptime Kuma, Homepage and socket proxy services
@@ -28,8 +31,8 @@ sources:
     resource: https://github.com/masterevan27/lab-status/blob/a185faa71074af7b8d702fa93d57f7c934c65b33/test/static.test.js
     title: Configuration consistency tests
 generated:
-  by: claude-code/claude-opus-5-5
-  at: 2026-10-22T16:00:00Z
+  by: codex/unrecorded
+  at: 2026-10-25T23:23:30.085661Z
 stale_after: 2027-01-09T00:00:00Z
 ---
 # Deploy on the lab VM
@@ -124,6 +127,7 @@ Open `https://status.<LAB_DOMAIN>`:
    | netmap | HTTP(s) | `https://netmap.<LAB_DOMAIN>/` |
    | photoprism | HTTP(s) | `https://photoprism.<LAB_DOMAIN>/api/v1/status` (runs on its own VM, so it has no Docker Container monitor) |
    | files | HTTP(s) | `https://files.<LAB_DOMAIN>/health` (runs on the Raspberry Pi, so it has no Docker Container monitor) |
+   | `librenms` | HTTP(s) | `https://librenms.<LAB_DOMAIN>/login` (200-299, two retries; see [network monitoring](LIBRENMS.md)) |
    | each container from step 2 except `lab-status-uptime-kuma-1` | Docker Container | its name, Docker host `lab` |
 
    The dashboard's page and `/api/version` keep answering 200 even when it
@@ -215,3 +219,9 @@ fork's `feat/status-page-time-range` branch is upstream 2.5.5 plus the commits
 that add the selector and are meant to become an upstream pull request. The
 Dockerfile mirrors the release stage of upstream's `docker/dockerfile` and adds
 the frontend build that upstream's release pipeline runs beforehand.
+
+## Network hardware monitoring
+
+LibreNMS now runs as a separate Compose project on this VM. See
+[Network monitoring](LIBRENMS.md) for its devices, credentials locations, alerts,
+operation and recovery limits. Kuma monitor 22 watches its HTTPS login page.

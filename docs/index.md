@@ -6,6 +6,7 @@ okf_version: "0.2"
 # Documentation
 
 - [Deploy on the lab VM](DEPLOY.md) - Deploy the lab monitoring stack and configure first-run access, monitors, alerts and backups.
+- [Network monitoring with LibreNMS](LIBRENMS.md) - Operate the Docker LibreNMS stack and its independent Home Assistant watchdog.
 - [Maintain OKF documentation](OKF.md) - Install the pinned tools, check documentation and maintain bundle navigation and scope.
 - [Versioning](VERSIONING.md) - Authoritative release version source and project-specific version change procedure.
 - [superpowers](superpowers/index.md) - superpowers documentation.

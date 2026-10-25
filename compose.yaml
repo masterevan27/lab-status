@@ -56,6 +56,7 @@ services:
       - "foundry.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "home.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "netmap.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "librenms.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "nettools.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "npc-import.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "photoprism.${LAB_DOMAIN}:${PROXY_CADDY_IP}"

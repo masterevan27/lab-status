@@ -53,6 +53,12 @@
         icon: mdi-folder-network
 
 - Infrastructure:
+    - LibreNMS:
+        href: https://librenms.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Network device health and alerts
+        icon: mdi-lan-check
+        server: lab
+        container: librenms-web-1
     - Uptime Kuma:
         href: https://status.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: Monitors and alerts

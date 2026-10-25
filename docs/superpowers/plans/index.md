@@ -3,3 +3,4 @@
 # plans
 
 - [lab-status Implementation Plan](2026-10-05-lab-status.md) - Implementation sequence, dependencies and verification steps for the private lab monitoring and service landing stack.
+- [Network monitoring implementation](2026-10-25-network-monitoring.md) - Deploy LibreNMS and independent Home Assistant reachability alerts.
