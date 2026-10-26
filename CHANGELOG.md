@@ -4,13 +4,20 @@ title: Changelog
 description: Recorded project releases and the changes included in each release.
 generated:
   by: codex/unrecorded
-  at: 2026-10-25T23:23:30.085661Z
+  at: 2026-10-26T06:32:12.169705Z
 sources:
+  - id: ai-control-source
+    resource: config/ai-monitors.json
+    title: Prepared AI monitor definitions
   - id: readme-preview
     resource: README.md
     title: README deliverable preview
 ---
 # Changelog
+
+## 2.1.0 — 2026-10-26
+
+- Add source-only AI Server, Hermes and ComfyUI Homepage links, Kuma host mappings and credential-free monitor definitions. VM103 services have no Docker badges; live enrollment and activation remain pending.
 
 ## 2.0.0 — 2026-10-25
 

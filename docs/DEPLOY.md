@@ -9,6 +9,9 @@ tags:
   - monitoring
   - operations
 sources:
+  - id: ai-control-source
+    resource: ../config/ai-monitors.json
+    title: Prepared AI service integration
   - id: network-monitoring-20261025
     resource: LIBRENMS.md
     title: LibreNMS deployment and evidence
@@ -32,7 +35,7 @@ sources:
     title: Configuration consistency tests
 generated:
   by: codex/unrecorded
-  at: 2026-10-25T23:23:30.085661Z
+  at: 2026-10-26T06:34:01.987676Z
 stale_after: 2027-01-09T00:00:00Z
 ---
 # Deploy on the lab VM
@@ -225,3 +228,11 @@ the frontend build that upstream's release pipeline runs beforehand.
 LibreNMS now runs as a separate Compose project on this VM. See
 [Network monitoring](LIBRENMS.md) for its devices, credentials locations, alerts,
 operation and recovery limits. Kuma monitor 22 watches its HTTPS login page.
+
+## Prepared AI service entries (not deployed)
+
+Homepage has AI Server, Hermes and ComfyUI links for VM103; these have no Docker container badges. `config/ai-monitors.json` is a credential-free definition file for manual Kuma enrollment, not an automatically imported database. Compose maps all three site names to Caddy through extra_hosts.
+
+After separate deployment authorization and proxy/native-auth acceptance, enroll the three HTTPS monitors from that file using the current LAB_DOMAIN, verified CA and expected status codes. `/healthz` reports control-process liveness only; a200 response does not establish GPU readiness. Hermes root accepts a login page/redirect/401; confirm that the native auth gate is engaged separately. ComfyUI root checks editor reachability, not generation. Keep usernames, cookies, CSRF tokens and native passwords out of monitor exports. Back up Kuma before edits and retain monitor IDs for rollback; remove only the three newly created monitors if reversing this change.
+
+No Homepage recreation, Kuma write, monitor enrollment or notification test was performed by this source task. Existing physical thin-pool monitoring remains a separate request.

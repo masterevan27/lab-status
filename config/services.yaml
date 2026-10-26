@@ -3,6 +3,19 @@
 # `docker ps` on the VM (docs/DEPLOY.md). Foundry, SillyTavern and NPC import
 # use the explicit names confirmed on sfdockerhost1.
 - Lab apps:
+    # VM103 services have no Docker container badge on VM101.
+    - AI Server:
+        href: https://ai.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: GPU modes and private server status
+        icon: mdi-tune
+    - Hermes:
+        href: https://hermes.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Local model chat
+        icon: mdi-chat-processing
+    - ComfyUI:
+        href: https://comfyui.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Image workflows and output
+        icon: mdi-image-edit
     - Network tools:
         href: https://nettools.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: network-tools-portal

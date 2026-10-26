@@ -1,0 +1,5 @@
+[
+  {"name": "AI Server", "site": "ai", "path": "/healthz", "expectedStatus": [200]},
+  {"name": "Hermes native auth", "site": "hermes", "path": "/", "expectedStatus": [200, 302, 401]},
+  {"name": "ComfyUI editor", "site": "comfyui", "path": "/", "expectedStatus": [200]}
+]

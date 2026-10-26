@@ -111,7 +111,20 @@ test('Uptime Kuma refuses to start when the CA file is missing', () => {
 
 test('Uptime Kuma resolves every lab site to Caddy', () => {
     assert.deepEqual(KUMA_HOSTS().sort(),
-        ['dashboard', 'files', 'foundry', 'home', 'librenms', 'netmap', 'nettools', 'npc-import', 'photoprism', 'sillytavern', 'st-uplink', 'status']);
+        ['ai', 'comfyui', 'dashboard', 'files', 'foundry', 'hermes', 'home', 'librenms', 'netmap', 'nettools', 'npc-import', 'photoprism', 'sillytavern', 'st-uplink', 'status']);
+});
+
+test('AI VM links and health definitions contain no fictitious Docker badges or credentials', () => {
+    const tiles = code('config/services.yaml');
+    const monitors = JSON.parse(read('config/ai-monitors.json'));
+    for (const name of ['ai', 'hermes', 'comfyui']) {
+        assert.ok(tiles.includes(`https://${name}.{{HOMEPAGE_VAR_LAB_DOMAIN}}`));
+        const monitor = monitors.find(m => m.site === name);
+        assert.ok(monitor);
+        assert.ok(monitor.path.startsWith('/'));
+        assert.deepEqual(Object.keys(monitor).sort(), ['expectedStatus', 'name', 'path', 'site']);
+    }
+    assert.doesNotMatch(tiles.slice(tiles.indexOf('- AI Server:'), tiles.indexOf('- Network tools:')), /container:|server:/);
 });
 
 test('Homepage accepts only its proxied host name and reads config read-only', () => {

@@ -27,6 +27,11 @@ allow-list.
 
 [LibreNMS deployment and monitoring](docs/LIBRENMS.md) runs as a separate Compose project.
 
+Prepared AI Server, Hermes and ComfyUI Homepage links and Kuma definitions are
+source-only additions for VM103. They have no Docker badges and have not been
+enrolled live. Follow the [AI entry activation steps](docs/DEPLOY.md#prepared-ai-service-entries-not-deployed)
+with the matching proxy/control release before changing the running stack.
+
 ## Deploy
 
 On the VM, after homelab-proxy 0.3.0 or later:

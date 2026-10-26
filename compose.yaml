@@ -49,6 +49,9 @@ services:
         bind:
           create_host_path: false
     extra_hosts:
+      - "ai.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "hermes.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "comfyui.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       # Checks go straight to Caddy over homelab-proxy, not through the VM's
       # DNS or hairpin NAT. Keep in step with homelab-proxy's sites/.
       - "dashboard.${LAB_DOMAIN:?set LAB_DOMAIN in .env}:${PROXY_CADDY_IP:?set PROXY_CADDY_IP in .env}"
