@@ -27,10 +27,10 @@ allow-list.
 
 [LibreNMS deployment and monitoring](docs/LIBRENMS.md) runs as a separate Compose project.
 
-Prepared AI Server, Hermes and ComfyUI Homepage links and Kuma definitions are
-source-only additions for VM103. They have no Docker badges and have not been
-enrolled live. Follow the [AI entry activation steps](docs/DEPLOY.md#prepared-ai-service-entries-not-deployed)
-with the matching proxy/control release before changing the running stack.
+AI Server, Hermes and ComfyUI Homepage links are deployed for VM103, with
+Kuma monitors27/28/29 enrolled on 2026-10-26. They have no Docker badges.
+The [AI entry operations](docs/DEPLOY.md#ai-service-entries-deployed-2026-10-26)
+separate liveness/login/editor checks from real GPU and output acceptance.
 
 ## Deploy
 

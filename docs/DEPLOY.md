@@ -35,7 +35,7 @@ sources:
     title: Configuration consistency tests
 generated:
   by: codex/unrecorded
-  at: 2026-10-26T06:34:01.987676Z
+  at: 2026-10-26T16:18:59.811667Z
 stale_after: 2027-01-09T00:00:00Z
 ---
 # Deploy on the lab VM
@@ -229,10 +229,23 @@ LibreNMS now runs as a separate Compose project on this VM. See
 [Network monitoring](LIBRENMS.md) for its devices, credentials locations, alerts,
 operation and recovery limits. Kuma monitor 22 watches its HTTPS login page.
 
-## Prepared AI service entries (not deployed)
+## AI service entries (deployed 2026-10-26)
 
 Homepage has AI Server, Hermes and ComfyUI links for VM103; these have no Docker container badges. `config/ai-monitors.json` is a credential-free definition file for manual Kuma enrollment, not an automatically imported database. Compose maps all three site names to Caddy through extra_hosts.
 
 After separate deployment authorization and proxy/native-auth acceptance, enroll the three HTTPS monitors from that file using the current LAB_DOMAIN, verified CA and expected status codes. `/healthz` reports control-process liveness only; a200 response does not establish GPU readiness. Hermes root accepts a login page/redirect/401; confirm that the native auth gate is engaged separately. ComfyUI root checks editor reachability, not generation. Keep usernames, cookies, CSRF tokens and native passwords out of monitor exports. Back up Kuma before edits and retain monitor IDs for rollback; remove only the three newly created monitors if reversing this change.
 
-No Homepage recreation, Kuma write, monitor enrollment or notification test was performed by this source task. Existing physical thin-pool monitoring remains a separate request.
+The source task performed no live changes. The later owner-authorized deployment
+updated VM101 to status2.1.0 and recreated Kuma with the new extra_hosts, using
+the existing locally built image. The three monitors are enrolled as27/28/29
+and each returned200 through verified TLS. The existing Homepage config mount
+now contains the three links. No notification destination or existing monitor
+was edited, and no notification delivery test is claimed.
+
+Before enrollment, the running SQLite database was backed up with VACUUM INTO:
+`/app/data/kuma-before-ai-control-20261026.sqlite`; a mode0600 copy is retained
+on VM101 at `/home/edekalb/ai-control-deploy-20261026/kuma-before.sqlite`.
+These contain private configuration and must never be committed.
+Full scoped evidence is in homelab-infra
+`review-evidence/2026-10-26-ai-control-live.md`. Physical thin-pool monitoring
+remains a separate request.

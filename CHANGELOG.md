@@ -4,7 +4,7 @@ title: Changelog
 description: Recorded project releases and the changes included in each release.
 generated:
   by: codex/unrecorded
-  at: 2026-10-26T06:32:12.169705Z
+  at: 2026-10-26T16:18:59.811667Z
 sources:
   - id: ai-control-source
     resource: config/ai-monitors.json
@@ -14,6 +14,10 @@ sources:
     title: README deliverable preview
 ---
 # Changelog
+
+## 2.1.1 — 2026-10-26
+
+- Record deployed AI links, Kuma monitors27–29 and the consistent private pre-enrollment database backup.
 
 ## 2.1.0 — 2026-10-26
 
