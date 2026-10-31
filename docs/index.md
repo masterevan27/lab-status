@@ -8,5 +8,6 @@ okf_version: "0.2"
 - [Deploy on the lab VM](DEPLOY.md) - Deploy the lab monitoring stack and configure first-run access, monitors, alerts and backups.
 - [Network monitoring with LibreNMS](LIBRENMS.md) - Operate the Docker LibreNMS stack and its independent Home Assistant watchdog.
 - [Maintain OKF documentation](OKF.md) - Install the pinned tools, check documentation and maintain bundle navigation and scope.
+- [Remote access with Tailscale](TAILSCALE.md) - Operate the Tailscale subnet router that gives tailnet devices Home Assistant, the lab sites and split DNS without opening a port.
 - [Versioning](VERSIONING.md) - Authoritative release version source and project-specific version change procedure.
 - [superpowers](superpowers/index.md) - superpowers documentation.

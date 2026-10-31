@@ -2,6 +2,7 @@
 *.key
 *.pem
 *.tgz
+.worktrees/
 
 # >>> shared baseline (same in every repo; edit project rules above) >>>
 # OS metadata

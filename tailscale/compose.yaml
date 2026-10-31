@@ -1,0 +1,44 @@
+name: tailscale
+
+# Remote access for phones and laptops: a Tailscale subnet router that advertises
+# only Home Assistant, the lab proxy and the router's DNS. See docs/TAILSCALE.md.
+#
+# Userspace networking is required on this VM: Docker's address pools live in
+# 100.64.0.0/20, inside Tailscale's 100.64.0.0/10 range, and kernel mode would add
+# host routes and firewall rules for that range. Userspace mode changes neither.
+services:
+  tailscale:
+    image: tailscale/tailscale:v1.104.4
+    restart: unless-stopped
+    # Host networking lets tailscaled hole-punch direct connections; in userspace
+    # mode it still adds no routes, interfaces or firewall rules to the host.
+    network_mode: host
+    environment:
+      # Home Assistant, the Caddy lab proxy, and router DNS for split DNS.
+      TS_ROUTES: 10.8.30.58/32,10.8.30.29/32,10.8.30.1/32
+    # The image's containerboot gives an interactive login only 60 seconds before
+    # it exits and restarts with a new URL. Without an auth key, run tailscaled
+    # directly: `tailscale up` then waits for the owner's login as long as needed
+    # and, once the volume holds a login, just reapplies these settings.
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        mkdir -p /var/run/tailscale
+        tailscaled --tun=userspace-networking --statedir=/var/lib/tailscale --socket=/var/run/tailscale/tailscaled.sock &
+        until [ -S /var/run/tailscale/tailscaled.sock ]; do sleep 1; done
+        tailscale up --hostname=sfdockerhost1 --accept-dns=false --advertise-routes="$$TS_ROUTES"
+        wait
+    volumes:
+      - state:/var/lib/tailscale
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+    deploy:
+      resources:
+        limits: {memory: 256M}
+
+volumes:
+  state:

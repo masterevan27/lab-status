@@ -27,6 +27,10 @@ allow-list.
 
 [LibreNMS deployment and monitoring](docs/LIBRENMS.md) runs as a separate Compose project.
 
+[Remote access with Tailscale](docs/TAILSCALE.md) is another separate project: a
+userspace subnet router that gives tailnet devices Home Assistant, the lab sites
+and split DNS, with no port forwarded.
+
 AI Server, Hermes and ComfyUI Homepage links are deployed for VM103, with
 Kuma monitors27/28/29 enrolled on 2026-10-26. They have no Docker badges.
 The [AI entry operations](docs/DEPLOY.md#ai-service-entries-deployed-2026-10-26)

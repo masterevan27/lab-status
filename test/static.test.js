@@ -187,6 +187,28 @@ test('the layout names exactly the groups services.yaml defines', () => {
     assert.deepEqual(layout, groups);
 });
 
+// The Tailscale subnet router: userspace only, because Docker's pools sit inside
+// Tailscale's 100.64.0.0/10 range (see docs/TAILSCALE.md).
+const tailscale = () => block(block(code('tailscale/compose.yaml'), 'services', 0), 'tailscale', 2);
+
+test('Tailscale runs in userspace with no capabilities, auth key or Docker socket', () => {
+    const svc = tailscale();
+    assert.match(svc, /tailscaled --tun=userspace-networking /);
+    assert.match(svc, /^ {4}cap_drop: \[ALL\]$/m);
+    assert.doesNotMatch(svc, /cap_add|privileged|\/dev\/net\/tun|docker\.sock|TS_AUTHKEY/);
+    assert.match(svc, /no-new-privileges:true/);
+    assert.match(svc, /^\s+limits: \{memory: \d+M\}$/m);
+    assert.match(svc, /^ {4}image: tailscale\/tailscale:v\d+\.\d+\.\d+$/m);
+});
+
+test('Tailscale advertises exactly the routes its access policy allows', () => {
+    const routes = tailscale().match(/^ {6}TS_ROUTES: (\S+)$/m)[1].split(',').sort();
+    assert.deepEqual(routes, ['10.8.30.1/32', '10.8.30.29/32', '10.8.30.58/32']);
+    const policy = read('tailscale/policy.hujson');
+    const allowed = [...policy.matchAll(/"dst": \["([\d./]+)"\]/g)].map((m) => m[1]).sort();
+    assert.deepEqual(allowed, routes);
+});
+
 test('VERSION matches the newest CHANGELOG entry', () => {
     const version = read('VERSION').trim();
     assert.match(version, /^\d+\.\d+\.\d+$/);

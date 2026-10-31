@@ -15,6 +15,10 @@ sources:
 ---
 # Changelog
 
+## 2.2.0 — 2026-10-31
+
+- Add the separate `tailscale` Compose project: a userspace Tailscale subnet router advertising only Home Assistant, the Caddy lab proxy and router DNS, its tailnet access policy, the [runbook](docs/TAILSCALE.md) and static checks. The main stack needs no change.
+
 ## 2.1.1 — 2026-10-26
 
 - Record deployed AI links, Kuma monitors27–29 and the consistent private pre-enrollment database backup.

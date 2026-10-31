@@ -1,0 +1,12 @@
+// Tailnet access policy. Paste into the Tailscale admin console under
+// Access controls, replacing the default allow-all policy. See docs/TAILSCALE.md.
+{
+	"grants": [
+		// Home Assistant.
+		{"src": ["autogroup:member"], "dst": ["10.8.30.58/32"], "ip": ["tcp:8123"]},
+		// The *.lab sites behind Caddy (HTTP only redirects to HTTPS).
+		{"src": ["autogroup:member"], "dst": ["10.8.30.29/32"], "ip": ["tcp:80", "tcp:443", "udp:443"]},
+		// Router DNS, used by split DNS for spiralfrenzy.com.
+		{"src": ["autogroup:member"], "dst": ["10.8.30.1/32"], "ip": ["tcp:53", "udp:53"]},
+	],
+}
