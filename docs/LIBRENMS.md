@@ -30,6 +30,8 @@ stale_after: 2027-01-23T00:00:00-05:00
 ---
 # Network monitoring with LibreNMS
 
+Operate the Docker LibreNMS stack, its devices and alerts, and the independent Home Assistant watchdog.
+
 Deployed 2026-10-25 on sfdockerhost1 (VM101, `10.8.30.29`). Open
 [LibreNMS](https://librenms.lab.spiralfrenzy.com); your local admin username is
 `evan`. The owner approved storing its generated password and SNMPv3 credentials
@@ -180,3 +182,9 @@ outage. The owner confirmed the original Pixel test and Discord channel receipt;
 the additional direct-bridge test receipt remains unconfirmed.
 WAN/power failures can prevent external delivery; HA keeps local alerts, but an
 external heartbeat and independent power path were not configured.
+
+## Related
+
+- [Deploy on the lab VM](DEPLOY.md) - the Kuma monitor for the LibreNMS login page.
+- [Add monitors and the status page](deploy/kuma-monitors.md) - the `librenms` monitor entry.
+- [Remote access with Tailscale](TAILSCALE.md) - reach the lab from outside.

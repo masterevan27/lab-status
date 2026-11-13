@@ -25,16 +25,16 @@ sources:
     resource: https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/0b87c52c6ef999286c745e19998fdfcd03d5dbee/SPEC.md
     title: Open Knowledge Format v0.2 specification
 generated:
-  by: claude-code/claude-opus-5-5
-  at: 2026-10-20T05:06:43Z
+  by: claude-code/claude-sonnet-5-5
+  at: 2026-11-13T00:00:00Z
 stale_after: 2027-01-18T00:00:00Z
 ---
 # Maintain OKF documentation
 
-This project uses house profile 1.1.0 and OKF 0.2. The repository-owned
+This project uses house profile 1.2.0 and OKF 0.2. The repository-owned
 [profile](../.okf/tools/profile.md) and [lock](../.okf/tools/profile.json) define
 the pinned policy; `.okf/tools` contains its self-contained runtime snapshot.
-Profile 1.1.0 warns when a concept lacks `generated` or a runbook lacks
+Profile 1.2.0 warns when a concept lacks `generated` or a runbook lacks
 `sources` or `stale_after`; warnings keep the check passing, but treat them as
 review work.
 
@@ -56,6 +56,14 @@ Preserve document paths and unknown metadata. Every concept in `docs/` requires
 frontmatter; nested indexes have none. The index command refreshes only marked
 generated indexes; maintain handwritten indexes manually. CI installs and checks
 the same pinned runtime. Review tool upgrades as explicit repository changes.
+
+## Page layout
+
+Keep each page to one topic, under about 150 lines. Give it one H1, a one-sentence
+purpose directly under it and a closing `## Related` section of relative links.
+Split a longer topic into pages under a folder named after it and keep the
+original page as a short hub, because document paths are registered elsewhere.
+Link pages with relative Markdown links, not wikilinks.
 
 ## Metadata conventions
 
@@ -110,3 +118,9 @@ review, live deployment or completion of a historical plan. Existing implementat
 notes and validation gaps remain authoritative context; the dashboard owns task,
 test and roadmap state. Do not infer completed work from document lifecycle
 metadata, invent verification actors or renew freshness dates without evidence.
+
+## Related
+
+- [Documentation index](index.md) - all documentation pages.
+- [Versioning](VERSIONING.md) - version bump rules for documentation changes.
+- [Deploy on the lab VM](DEPLOY.md) - an example of the one-topic page layout.

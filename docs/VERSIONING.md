@@ -24,9 +24,17 @@ stale_after: 2027-01-07T00:00:00Z
 ---
 # Versioning
 
+The root `VERSION` file is the release version source, and this page says when and how to change it.
+
 - The root `VERSION` file is the single source of truth.
 - Semantic versioning: MAJOR for changes that need action on the VM (new
   variables in `.env`, volume or network changes, a Kuma major upgrade); MINOR
   for new monitors, tiles or features; PATCH for fixes and documentation.
 - Bump `VERSION` once per change that lands on `main` and add a matching entry
   to `CHANGELOG.md` in the same commit. `node --test "test/*.test.js"` checks they agree.
+
+## Related
+
+- [Documentation index](index.md) - all documentation pages.
+- [Maintain OKF documentation](OKF.md) - documentation editing rules.
+- [Deploy on the lab VM](DEPLOY.md) - upgrades bump `VERSION` too.

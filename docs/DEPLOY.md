@@ -34,199 +34,33 @@ sources:
     resource: https://github.com/masterevan27/lab-status/blob/a185faa71074af7b8d702fa93d57f7c934c65b33/test/static.test.js
     title: Configuration consistency tests
 generated:
-  by: codex/unrecorded
-  at: 2026-10-26T16:18:59.811667Z
+  by: claude-code/claude-sonnet-5-5
+  at: 2026-11-13T00:00:00Z
 stale_after: 2027-01-09T00:00:00Z
 ---
 # Deploy on the lab VM
 
-Run these on the VM that hosts homelab-proxy (Docker Engine, Compose 2.24.4 or
-later), in this repository's checkout.
+Deploy the lab monitoring stack on the VM that hosts homelab-proxy (Docker
+Engine, Compose 2.24.4 or later), from this repository's checkout.
 
-## 1. Prerequisites
+## Procedure
 
-- homelab-proxy 0.3.0 or later is running. It creates the `homelab-proxy`
-  network and serves the `status` and `home` sites.
-- homelab-proxy's `LAB_ALLOWED_CIDRS` includes its `PROXY_SUBNET`. The shipped
-  default `172.16.0.0/12` covers `172.31.250.0/24`. If you narrow the list, add
-  the proxy subnet back, or Caddy refuses every Uptime Kuma check and all sites
-  show down.
-- homelab-proxy's root certificate is on the VM. Its `docs/TRUST.md` Linux step
-  installs it at `/usr/local/share/ca-certificates/homelab-proxy-root.crt`,
-  which is the default `HOMELAB_CA_ROOT`. Check it is a file:
+Follow these pages in order for a first deployment:
 
-  ```sh
-  test -f /usr/local/share/ca-certificates/homelab-proxy-root.crt && echo ok
-  ```
+| Step | Page | What it covers |
+|---|---|---|
+| 1 | [Deploy prerequisites](deploy/prerequisites.md) | homelab-proxy, allow-list, root certificate and the Uptime Kuma fork checkout |
+| 2 | [Confirm names and start the stack](deploy/start-stack.md) | container names in `config/services.yaml`, `.env`, build and start |
+| 3 | [Uptime Kuma first run](deploy/kuma-first-run.md) | admin account, Docker host and Discord notification |
+| 4 | [Add monitors and the status page](deploy/kuma-monitors.md) | the monitor list and the `lab` status page |
+| 5 | [Check the deployment](deploy/verify.md) | tiles, readiness endpoint and the alert test |
 
-  Compose refuses to start Uptime Kuma if the file is missing.
-- A checkout of the Uptime Kuma fork, branch `feat/status-page-time-range`,
-  next to this repository as `../uptime-kuma`, or at the path set in `KUMA_SRC`.
-  Compose builds Uptime Kuma from it: see [Uptime Kuma image](#uptime-kuma-image).
+Operate the running stack with:
 
-## 2. Confirm container names
-
-```sh
-docker ps --format '{{.Names}}' | sort
-```
-
-Compare the list with `config/services.yaml`:
-
-- Fix any `container:` name that differs.
-- Foundry, SillyTavern and NPC import use the names confirmed on sfdockerhost1:
-  `foundry-v13`, `sillytavern` and `lancer-import-gui`. Update them if your VM
-  uses different names.
-
-Commit those edits so the repository matches the VM.
-
-## 3. Start
-
-```sh
-cp .env.example .env          # check LAB_DOMAIN, PROXY_CADDY_IP, HOMELAB_CA_ROOT, KUMA_SRC
-docker compose build uptime-kuma   # several minutes: npm install and frontend build
-docker compose up -d
-docker compose ps             # three services running; uptime-kuma and homepage healthy
-docker compose logs homepage | tail -n 20
-```
-
-Homepage must not log a read-only or permission error. If it names a file,
-create that file empty in `config/` and add it to the test's `HOMEPAGE_FILES`.
-
-## 4. Uptime Kuma first run
-
-Until an admin account exists, Uptime Kuma's setup page is open to every
-client in `LAB_ALLOWED_CIDRS`, and whoever reaches it first becomes the admin.
-Do step 1 straight away after `docker compose up -d`. If others share your LAN
-or tailnet, do it over an SSH tunnel instead: from your PC run
-`ssh -L 3001:<uptime-kuma container IP>:3001 <vm>` (IP from
-`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}' lab-status-uptime-kuma-1`)
-and open `http://localhost:3001`.
-
-Open `https://status.<LAB_DOMAIN>`:
-
-1. Choose **SQLite** and create the admin account. Keep the password in your
-   password manager. Reload the page: it must now show the login page, not
-   the setup page.
-2. Leave **Trust Proxy** disabled unless you have reviewed the trusted-proxy
-   scope. Monitoring works with it disabled in the current deployment.
-3. **Settings → Docker Hosts → Setup Docker Host:** name `lab`, connection type
-   **TCP / HTTP**, daemon `tcp://socket-proxy:2375`. Use **Test**.
-4. **Settings → Notifications → Setup Notification:** type **Discord**, paste
-   the webhook URL (in Discord: Server Settings → Integrations → Webhooks → New
-   Webhook → Copy Webhook URL). Tick **Default enabled** and **Apply on all
-   existing monitors**, then **Test**.
-5. Add the monitors below. HTTP(s) monitors: interval 60 s, accepted status
-   codes `200-399`; if a site answers `401` because of its own login, add `401`.
-   Never tick "Ignore TLS/SSL errors".
-
-   | Name | Type | Target |
-   |---|---|---|
-   | nettools | HTTP(s) | `https://nettools.<LAB_DOMAIN>/` |
-   | dashboard | HTTP(s) | `https://dashboard.<LAB_DOMAIN>/api/ready` (accepted `200-299` only) |
-   | foundry | HTTP(s) | `https://foundry.<LAB_DOMAIN>/` |
-   | sillytavern | HTTP(s) | `https://sillytavern.<LAB_DOMAIN>/` |
-   | npc-import | HTTP(s) | `https://npc-import.<LAB_DOMAIN>/` |
-   | home | HTTP(s) | `https://home.<LAB_DOMAIN>/` |
-   | netmap | HTTP(s) | `https://netmap.<LAB_DOMAIN>/` |
-   | photoprism | HTTP(s) | `https://photoprism.<LAB_DOMAIN>/api/v1/status` (runs on its own VM, so it has no Docker Container monitor) |
-   | files | HTTP(s) | `https://files.<LAB_DOMAIN>/health` (runs on the Raspberry Pi, so it has no Docker Container monitor) |
-   | tensorboard | HTTP(s) | `https://tensorboard.<LAB_DOMAIN>/` (runs on VM 104 rl-hoh, so it has no Docker Container monitor) |
-   | proxmox2, proxmox | HTTP(s) | `https://proxmox2.<LAB_DOMAIN>/`, `https://proxmox.<LAB_DOMAIN>/` (the Proxmox VE login pages) |
-   | HA Green | HTTP(s) | `https://home.spiralfrenzy.com:8123/manifest.json` (Home Assistant serves its own HTTPS and is not behind the proxy) |
-   | Pi Samba, Pi NFS, Proxmox QDevice | TCP Port | `10.8.30.63` ports `445`, `2049` and `5403` (`corosync-qnetd`). A listening port does not prove the share mounts or that the cluster counts the vote; `pvecm status` does |
-   | `librenms` | HTTP(s) | `https://librenms.<LAB_DOMAIN>/login` (200-299, two retries; see [network monitoring](LIBRENMS.md)) |
-   | each container from step 2 except `lab-status-uptime-kuma-1`, plus `ai-agent-dashboard` and `tailscale-tailscale-1` | Docker Container | its name, Docker host `lab` |
-
-   The dashboard's page and `/api/version` keep answering 200 even when it
-   can't rebuild its project state from its event log. In that state every
-   project request fails, so an outage would look up. `/api/ready`
-   (ai-agent-dashboard 0.11.1 or later) needs no sign-in and returns 503
-   `{"ok":false}` in that case. Keep its accepted codes at `200-299`, not the
-   default `200-399` or `401`, and don't add an API token: the URL is public
-   by design and reveals only that one flag. On an older dashboard the URL
-   returns `401`, so upgrade the dashboard before switching an existing
-   monitor (**Edit** the `dashboard` monitor, change the URL and accepted
-   codes, **Save**).
-
-   `st-uplink` is a plugin listener without a page of its own; the SillyTavern
-   container monitor covers it.
-   On sfdockerhost1, SillyTavern's whitelist rejects the checker with `403`.
-   Its HTTP keyword monitor accepts only `403` and requires `config.yaml` in
-   the expected whitelist-denial page; the Docker monitor checks container
-   health. This verifies the access gate, not an authenticated application page.
-   Keep TLS verification enabled and preserve the whitelist.
-6. **Status Pages → New Status Page:** name `Lab`, slug `lab`. Add the HTTP(s)
-   monitors (AI and TensorBoard under Lab apps; LibreNMS, Proxmox, HA Green and
-   the Pi port checks in an Infrastructure group) and save. Homepage's Uptime Kuma tile reads this page.
-   The **Uptime range** selector above the list sets both the uptime
-   percentage and the heartbeat bar: 24 hours when first opened, or 1, 3 or
-   5 hours, 7 days, 30 days or 1 year. The bar shows the range as equal
-   buckets; a yellow bucket had both up and down checks, and its tooltip
-   gives the counts. The browser remembers the choice per page.
-
-## 5. Check
-
-- `https://home.<LAB_DOMAIN>` shows every tile. Container tiles show running
-  with CPU and memory, and the Uptime Kuma tile shows up/down counts.
-- Theme and color controls are in the Homepage footer and use browser-local
-  preferences. Leave `theme` and `color` unset in `config/settings.yaml` to
-  keep those controls available, then refresh the page after configuration changes.
-- `curl -sS https://dashboard.<LAB_DOMAIN>/api/ready` prints `{"ok":true}`,
-  and the `dashboard` monitor is up. Any other answer means the dashboard
-  can't rebuild its state, or is older than 0.11.1.
-- Alert test: `docker stop nettools-web-1`. Within about two minutes Discord
-  shows the monitor down. `docker start nettools-web-1` and Discord shows it up.
-
-## Back up and restore
-
-The `lab-status_kuma_data` volume holds everything Uptime Kuma knows, including
-the admin password hash and the Discord webhook URL. Keep backups private.
-
-```sh
-docker compose stop uptime-kuma
-docker run --rm -v lab-status_kuma_data:/data -v "$PWD":/backup alpine \
-  tar czf /backup/kuma-data-$(date +%F).tgz -C /data .
-docker compose start uptime-kuma
-```
-
-Restore (replace `DATE`):
-
-```sh
-docker compose stop uptime-kuma
-docker run --rm -v lab-status_kuma_data:/data -v "$PWD":/backup alpine \
-  sh -c 'rm -rf /data/* && tar xzf /backup/kuma-data-DATE.tgz -C /data'
-docker compose start uptime-kuma
-```
-
-Homepage has no state: its configuration is this repository.
-
-## Upgrade
-
-Back up `kuma_data`. Uptime Kuma is built from the fork, so rebase its
-`feat/status-page-time-range` branch onto the new upstream tag, change the
-local tag in `compose.yaml` (`2.5.5-range.2` becomes `<tag>-range.1`), bump
-`VERSION` and `CHANGELOG.md`, then:
-
-```sh
-docker compose pull --ignore-buildable
-docker compose build uptime-kuma
-docker compose up -d
-```
-
-Once an upstream release includes the selector, set `image:` back to
-`louislam/uptime-kuma:<tag>`, drop `build:` and `kuma/Dockerfile`, and remove
-`KUMA_SRC`.
-
-## Uptime Kuma image
-
-Upstream Uptime Kuma shows only the 24-hour uptime on a status page and has no
-range control ([uptime-kuma#986](https://github.com/louislam/uptime-kuma/issues/986)).
-`kuma/Dockerfile` builds the image from a fork checkout instead: the `src`
-build context in `compose.yaml`, `KUMA_SRC`, default `../uptime-kuma`. The
-fork's `feat/status-page-time-range` branch is upstream 2.5.5 plus the commits
-that add the selector and are meant to become an upstream pull request. The
-Dockerfile mirrors the release stage of upstream's `docker/dockerfile` and adds
-the frontend build that upstream's release pipeline runs beforehand.
+| Task | Page |
+|---|---|
+| Back up or restore `kuma_data` | [Back up and restore Uptime Kuma](deploy/backup-restore.md) |
+| Upgrade Uptime Kuma, or understand the fork image | [Upgrade and the Uptime Kuma image](deploy/upgrade.md) |
 
 ## Network hardware monitoring
 
@@ -236,38 +70,18 @@ operation and recovery limits. Kuma monitor 22 watches its HTTPS login page.
 
 ## AI service entries (deployed 2026-10-26)
 
-Homepage has AI Server, Hermes and ComfyUI links for VM103; these have no Docker container badges. `config/ai-monitors.json` is a credential-free definition file for manual Kuma enrollment, not an automatically imported database. Compose maps all three site names to Caddy through extra_hosts.
-
-After separate deployment authorization and proxy/native-auth acceptance, enroll the three HTTPS monitors from that file using the current LAB_DOMAIN, verified CA and expected status codes. `/healthz` reports control-process liveness only; a200 response does not establish GPU readiness. Hermes root accepts a login page/redirect/401; confirm that the native auth gate is engaged separately. ComfyUI root checks editor reachability, not generation. Keep usernames, cookies, CSRF tokens and native passwords out of monitor exports. Back up Kuma before edits and retain monitor IDs for rollback; remove only the three newly created monitors if reversing this change.
-
-The source task performed no live changes. The later owner-authorized deployment
-updated VM101 to status2.1.0 and recreated Kuma with the new extra_hosts, using
-the existing locally built image. The three monitors are enrolled as27/28/29
-and each returned200 through verified TLS. The existing Homepage config mount
-now contains the three links. No notification destination or existing monitor
-was edited, and no notification delivery test is claimed.
-
-Before enrollment, the running SQLite database was backed up with VACUUM INTO:
-`/app/data/kuma-before-ai-control-20261026.sqlite`; a mode0600 copy is retained
-on VM101 at `/home/edekalb/ai-control-deploy-20261026/kuma-before.sqlite`.
-These contain private configuration and must never be committed.
-Full scoped evidence is in homelab-infra
-`review-evidence/2026-10-26-ai-control-live.md`. Physical thin-pool monitoring
-remains a separate request.
+Homepage has AI Server, Hermes and ComfyUI links for VM103, and Kuma monitors
+27/28/29 are enrolled. See [AI service entries](deploy/ai-service-entries.md)
+for the liveness, login and editor checks and the rollback notes.
 
 ## Proxmox, TensorBoard and host monitors (deployed 2026-11-13)
 
-VM101 was fast-forwarded to homelab-proxy 0.11.0 and lab-status 2.3.0 from
-local bundles; Caddy and Kuma were recreated for the new mount and
-`extra_hosts`. Monitors 30–38 were added to the Kuma database while it ran and
-loaded on the recreate: tensorboard, proxmox2, proxmox, the `ai-agent-dashboard`
-and `tailscale-tailscale-1` containers, HA Green, and the Pi's Samba, NFS and
-QDevice ports. Each sends to the existing Discord notification. Monitors 27–30
-were added to Lab apps on the `lab` status page, and a new Infrastructure group
-(id 4) holds 22, 31, 32 and 35–38. First checks: all up except proxmox (502:
-that node was offline). Monitors 27–29 still have no notification.
+Monitors 30-38 and the Infrastructure status page group were added to Kuma. See
+[Proxmox, TensorBoard and host monitors](deploy/proxmox-host-monitors.md) for the
+list, the backup taken before the change and how to reverse it.
 
-Backup before the change: `/app/data/kuma-before-monitors-20261113.sqlite`, with
-a mode 0600 copy at `~/lab-deploy-20261113/kuma-before.sqlite` on VM101; never
-commit either. To reverse, delete monitors 30–38, group 4 and the four Lab apps
-`monitor_group` rows (27–30), or restore the backup while Kuma is stopped.
+## Related
+
+- [Network monitoring with LibreNMS](LIBRENMS.md) - the separate network monitoring stack.
+- [Remote access with Tailscale](TAILSCALE.md) - the separate remote-access stack.
+- [Versioning](VERSIONING.md) - bump `VERSION` and `CHANGELOG.md` for each change.

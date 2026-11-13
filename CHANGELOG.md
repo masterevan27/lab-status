@@ -15,6 +15,11 @@ sources:
 ---
 # Changelog
 
+## 2.3.2 — 2026-11-13
+
+- Split the deploy guide into one page per step under `docs/deploy/`, keeping `docs/DEPLOY.md` as the hub, and add a data-flow diagram to the README.
+- Upgrade the pinned OKF tools to 0.2.4 (profile 1.2.0).
+
 ## 2.3.1 — 2026-11-13
 
 - Record the deployed monitors 30–38, the Infrastructure status page group, and LibreNMS ping-only devices 13–16 for both Proxmox nodes, the Pi and HA Green.

@@ -22,6 +22,8 @@ stale_after: 2027-01-31T00:00:00-05:00
 ---
 # Remote access with Tailscale
 
+Operate the Tailscale subnet router that gives tailnet devices Home Assistant, the lab sites and split DNS without opening a port.
+
 A separate Compose project on sfdockerhost1 (VM101, `10.8.30.29`) runs one
 Tailscale node, `sfdockerhost1`, as a **subnet router**. Devices signed in to
 the owner's tailnet reach these three addresses from anywhere, and nothing
@@ -116,3 +118,9 @@ afterwards.
 To upgrade, change the pinned image tag and run `docker compose up -d`. To
 revoke access, remove the machine in the admin console and run
 `docker compose down -v`; deleting the volume forgets the node identity.
+
+## Related
+
+- [Deploy on the lab VM](DEPLOY.md) - the VM and Caddy sites the router exposes.
+- [Network monitoring with LibreNMS](LIBRENMS.md) - the other separate Compose project.
+- [Versioning](VERSIONING.md) - bump rules for `tailscale/` changes.

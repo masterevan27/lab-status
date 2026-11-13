@@ -10,4 +10,5 @@ okf_version: "0.2"
 - [Maintain OKF documentation](OKF.md) - Install the pinned tools, check documentation and maintain bundle navigation and scope.
 - [Remote access with Tailscale](TAILSCALE.md) - Operate the Tailscale subnet router that gives tailnet devices Home Assistant, the lab sites and split DNS without opening a port.
 - [Versioning](VERSIONING.md) - Authoritative release version source and project-specific version change procedure.
+- [deploy](deploy/index.md) - deploy documentation.
 - [superpowers](superpowers/index.md) - superpowers documentation.

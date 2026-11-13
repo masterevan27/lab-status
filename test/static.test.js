@@ -217,18 +217,22 @@ test('VERSION matches the newest CHANGELOG entry', () => {
     assert.equal(newest[1], version);
 });
 
+// The deploy guide is a hub (docs/DEPLOY.md) plus one page per step in docs/deploy/.
+const deployGuide = () => ['docs/DEPLOY.md', ...fs.readdirSync(path.join(ROOT, 'docs/deploy'))
+    .filter((f) => f.endsWith('.md')).sort().map((f) => `docs/deploy/${f}`)].map(read).join('\n');
+
 test('the deploy guide covers the steps a first deployment needs', () => {
-    const guide = read('docs/DEPLOY.md');
+    const guide = deployGuide();
     for (const needle of ['LAB_ALLOWED_CIDRS', "docker ps --format '{{.Names}}'", 'tcp://socket-proxy:2375',
         'Trust Proxy', 'Discord', 'slug `lab`', 'lab-status_kuma_data', 'docker stop',
         // The dashboard's page answers even when its state is broken; only /api/ready reports that.
         'https://dashboard.<LAB_DOMAIN>/api/ready']) {
-        assert.ok(guide.includes(needle), `docs/DEPLOY.md does not mention ${needle}`);
+        assert.ok(guide.includes(needle), `the deploy guide (docs/DEPLOY.md, docs/deploy/) does not mention ${needle}`);
     }
 });
 
 test('the deploy guide checks the CA file and claims the Kuma admin account at once', () => {
-    const guide = read('docs/DEPLOY.md');
+    const guide = deployGuide();
     assert.ok(guide.includes('test -f "$HOMELAB_CA_ROOT"') || guide.includes('test -f /usr/local/share/ca-certificates/homelab-proxy-root.crt'),
         'DEPLOY.md must check the CA file exists before starting');
     assert.ok(guide.includes('ssh -L 3001:'), 'DEPLOY.md must offer the SSH-tunnel first run');
