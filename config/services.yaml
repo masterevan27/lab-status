@@ -64,6 +64,13 @@
         href: https://files.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: Files on the NAS drives
         icon: mdi-folder-network
+    # TensorBoard runs on Proxmox2 VM 104 (rl-hoh) for the
+    # rl-heroesofhammerwatch1 training run, not on the lab Docker host, so its
+    # tile has no container status; Kuma monitors the site.
+    - TensorBoard:
+        href: https://tensorboard.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Hammerwatch RL training charts
+        icon: mdi-chart-line
 
 - Infrastructure:
     - LibreNMS:

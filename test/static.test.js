@@ -111,7 +111,7 @@ test('Uptime Kuma refuses to start when the CA file is missing', () => {
 
 test('Uptime Kuma resolves every lab site to Caddy', () => {
     assert.deepEqual(KUMA_HOSTS().sort(),
-        ['ai', 'comfyui', 'dashboard', 'files', 'foundry', 'hermes', 'home', 'librenms', 'netmap', 'nettools', 'npc-import', 'photoprism', 'sillytavern', 'st-uplink', 'status']);
+        ['ai', 'comfyui', 'dashboard', 'files', 'foundry', 'hermes', 'home', 'librenms', 'netmap', 'nettools', 'npc-import', 'photoprism', 'sillytavern', 'st-uplink', 'status', 'tensorboard']);
 });
 
 test('AI VM links and health definitions contain no fictitious Docker badges or credentials', () => {

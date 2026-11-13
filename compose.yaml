@@ -66,6 +66,7 @@ services:
       - "sillytavern.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "st-uplink.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "status.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "tensorboard.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
     security_opt: ["no-new-privileges:true"]
     networks:
       default: {}

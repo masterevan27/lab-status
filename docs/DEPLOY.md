@@ -130,6 +130,7 @@ Open `https://status.<LAB_DOMAIN>`:
    | netmap | HTTP(s) | `https://netmap.<LAB_DOMAIN>/` |
    | photoprism | HTTP(s) | `https://photoprism.<LAB_DOMAIN>/api/v1/status` (runs on its own VM, so it has no Docker Container monitor) |
    | files | HTTP(s) | `https://files.<LAB_DOMAIN>/health` (runs on the Raspberry Pi, so it has no Docker Container monitor) |
+   | tensorboard | HTTP(s) | `https://tensorboard.<LAB_DOMAIN>/` (runs on VM 104 rl-hoh, so it has no Docker Container monitor) |
    | `librenms` | HTTP(s) | `https://librenms.<LAB_DOMAIN>/login` (200-299, two retries; see [network monitoring](LIBRENMS.md)) |
    | each container from step 2 except `lab-status-uptime-kuma-1` | Docker Container | its name, Docker host `lab` |
 
