@@ -11,7 +11,7 @@ function datetime(value) {
     return month >= 1 && month <= 12 && day >= 1 && day <= days && hour < 24 && minute < 60 && second < 60 && zoneHour <= 23 && zoneMinute < 60;
 }
 
-function metadataChecks(doc, now, add) {
+export function metadataChecks(doc, now, add) {
     const m = doc.metadata;
     for (const field of ['type', 'title', 'description']) {
         if (!nonempty(m[field])) add('required-field', `${field} must be a nonempty string.`);

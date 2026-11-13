@@ -45,14 +45,16 @@ export function index(project) {
     if (errors.length) throw new Error(errors.map(d => `${d.file}: ${d.message}`).join('\n'));
     let changed = 0;
     for (const item of writes) {
-        if (fs.existsSync(item.file) && fs.readFileSync(item.file, 'utf8') === item.content) continue;
-        fs.writeFileSync(item.file, item.content);
+        // Compare and write in the file's own line endings so CRLF checkouts are not rewritten.
+        const current = fs.existsSync(item.file) ? fs.readFileSync(item.file, 'utf8') : undefined;
+        if (current !== undefined && current.replace(/\r\n/g, '\n') === item.content) continue;
+        fs.writeFileSync(item.file, current?.includes('\r\n') ? item.content.replace(/\n/g, '\r\n') : item.content);
         changed++;
     }
     return changed;
 }
 
-const runtimeFiles = ['bundle.mjs', 'check.mjs', 'scaffold.mjs', 'cli.mjs', 'profile.json', 'profile.md', 'package.json', 'package-lock.json'];
+const runtimeFiles = ['bundle.mjs', 'check.mjs', 'scaffold.mjs', 'cli.mjs', 'verify.mjs', 'profile.json', 'profile.md', 'package.json', 'package-lock.json'];
 
 function safeDestination(project, relative) {
     const absolute = path.resolve(project, relative);
