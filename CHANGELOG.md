@@ -15,6 +15,10 @@ sources:
 ---
 # Changelog
 
+## 2.3.1 — 2026-11-13
+
+- Record the deployed monitors 30–38, the Infrastructure status page group, and LibreNMS ping-only devices 13–16 for both Proxmox nodes, the Pi and HA Green.
+
 ## 2.3.0 — 2026-11-13
 
 - Add the TensorBoard Homepage link, Kuma host mapping and monitor row for homelab-proxy 0.11.0's `tensorboard` site on VM 104 (rl-hoh). It has no Docker badge.

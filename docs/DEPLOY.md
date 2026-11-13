@@ -254,3 +254,20 @@ These contain private configuration and must never be committed.
 Full scoped evidence is in homelab-infra
 `review-evidence/2026-10-26-ai-control-live.md`. Physical thin-pool monitoring
 remains a separate request.
+
+## Proxmox, TensorBoard and host monitors (deployed 2026-11-13)
+
+VM101 was fast-forwarded to homelab-proxy 0.11.0 and lab-status 2.3.0 from
+local bundles; Caddy and Kuma were recreated for the new mount and
+`extra_hosts`. Monitors 30–38 were added to the Kuma database while it ran and
+loaded on the recreate: tensorboard, proxmox2, proxmox, the `ai-agent-dashboard`
+and `tailscale-tailscale-1` containers, HA Green, and the Pi's Samba, NFS and
+QDevice ports. Each sends to the existing Discord notification. Monitors 27–30
+were added to Lab apps on the `lab` status page, and a new Infrastructure group
+(id 4) holds 22, 31, 32 and 35–38. First checks: all up except proxmox (502:
+that node was offline). Monitors 27–29 still have no notification.
+
+Backup before the change: `/app/data/kuma-before-monitors-20261113.sqlite`, with
+a mode 0600 copy at `~/lab-deploy-20261113/kuma-before.sqlite` on VM101; never
+commit either. To reverse, delete monitors 30–38, group 4 and the four Lab apps
+`monitor_group` rows (27–30), or restore the backup while Kuma is stopped.

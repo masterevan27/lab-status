@@ -98,6 +98,13 @@ addresses begin `10.8`). SNMP for these devices remains unconfigured pending
 device-specific SNMP configuration. At enrollment, the old living-room
 MikroTik `.30.74` was unreachable and was not enrolled; that observation alone
 does not establish retirement or physical cutover.
+
+Servers added 2026-11-13 as ping-only devices (no SNMP): proxmox2 `.30.22`
+(device 13), the files Pi `.30.63` (14), HA Green `.30.58` (15) and proxmox
+`.30.33` (16, added with `--force` because that node was offline). They use
+the same alert rules, so an unreachable server alerts like a network device.
+Uptime Kuma separately checks the Proxmox UIs, HA Green and the Pi's Samba,
+NFS and QDevice ports.
 Several management addresses are DHCP leases; an address change requires
 updating the monitor or verifying an owner-managed reservation.
 
