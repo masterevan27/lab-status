@@ -73,6 +73,16 @@
         icon: mdi-chart-line
 
 - Infrastructure:
+    # The Proxmox nodes serve their own UI; Caddy verifies them against the
+    # cluster CA. They are not Docker containers, so no status badge.
+    - Proxmox2:
+        href: https://proxmox2.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Proxmox VE node proxmox2 (VMs 100-104)
+        icon: mdi-server
+    - Proxmox:
+        href: https://proxmox.{{HOMEPAGE_VAR_LAB_DOMAIN}}
+        description: Proxmox VE node proxmox
+        icon: mdi-server
     - LibreNMS:
         href: https://librenms.{{HOMEPAGE_VAR_LAB_DOMAIN}}
         description: Network device health and alerts

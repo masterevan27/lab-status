@@ -63,6 +63,8 @@ services:
       - "nettools.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "npc-import.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "photoprism.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "proxmox.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
+      - "proxmox2.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "sillytavern.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "st-uplink.${LAB_DOMAIN}:${PROXY_CADDY_IP}"
       - "status.${LAB_DOMAIN}:${PROXY_CADDY_IP}"

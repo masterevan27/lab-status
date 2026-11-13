@@ -18,6 +18,7 @@ sources:
 ## 2.3.0 — 2026-11-13
 
 - Add the TensorBoard Homepage link, Kuma host mapping and monitor row for homelab-proxy 0.11.0's `tensorboard` site on VM 104 (rl-hoh). It has no Docker badge.
+- Add proxied Proxmox and Proxmox2 links (homelab-proxy 0.11.0) and their Kuma host mappings. Document monitors for both nodes, HA Green, the Pi's Samba, NFS and QDevice ports, the `ai-agent-dashboard` and `tailscale-tailscale-1` containers, and an Infrastructure group on the `lab` status page.
 
 ## 2.2.0 — 2026-10-31
 

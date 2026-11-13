@@ -131,8 +131,11 @@ Open `https://status.<LAB_DOMAIN>`:
    | photoprism | HTTP(s) | `https://photoprism.<LAB_DOMAIN>/api/v1/status` (runs on its own VM, so it has no Docker Container monitor) |
    | files | HTTP(s) | `https://files.<LAB_DOMAIN>/health` (runs on the Raspberry Pi, so it has no Docker Container monitor) |
    | tensorboard | HTTP(s) | `https://tensorboard.<LAB_DOMAIN>/` (runs on VM 104 rl-hoh, so it has no Docker Container monitor) |
+   | proxmox2, proxmox | HTTP(s) | `https://proxmox2.<LAB_DOMAIN>/`, `https://proxmox.<LAB_DOMAIN>/` (the Proxmox VE login pages) |
+   | HA Green | HTTP(s) | `https://home.spiralfrenzy.com:8123/manifest.json` (Home Assistant serves its own HTTPS and is not behind the proxy) |
+   | Pi Samba, Pi NFS, Proxmox QDevice | TCP Port | `10.8.30.63` ports `445`, `2049` and `5403` (`corosync-qnetd`). A listening port does not prove the share mounts or that the cluster counts the vote; `pvecm status` does |
    | `librenms` | HTTP(s) | `https://librenms.<LAB_DOMAIN>/login` (200-299, two retries; see [network monitoring](LIBRENMS.md)) |
-   | each container from step 2 except `lab-status-uptime-kuma-1` | Docker Container | its name, Docker host `lab` |
+   | each container from step 2 except `lab-status-uptime-kuma-1`, plus `ai-agent-dashboard` and `tailscale-tailscale-1` | Docker Container | its name, Docker host `lab` |
 
    The dashboard's page and `/api/version` keep answering 200 even when it
    can't rebuild its project state from its event log. In that state every
@@ -153,7 +156,8 @@ Open `https://status.<LAB_DOMAIN>`:
    health. This verifies the access gate, not an authenticated application page.
    Keep TLS verification enabled and preserve the whitelist.
 6. **Status Pages → New Status Page:** name `Lab`, slug `lab`. Add the HTTP(s)
-   monitors and save. Homepage's Uptime Kuma tile reads this page.
+   monitors (AI and TensorBoard under Lab apps; LibreNMS, Proxmox, HA Green and
+   the Pi port checks in an Infrastructure group) and save. Homepage's Uptime Kuma tile reads this page.
    The **Uptime range** selector above the list sets both the uptime
    percentage and the heartbeat bar: 24 hours when first opened, or 1, 3 or
    5 hours, 7 days, 30 days or 1 year. The bar shows the range as equal
