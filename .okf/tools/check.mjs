@@ -139,8 +139,8 @@ function logChecks(body, add) {
     if (!dates) add('log-structure', 'A log needs at least one dated group of list entries.');
 }
 
-export function check(project, { now = new Date(), proposedDocuments = new Map() } = {}) {
-    const bundle = loadBundle(project);
+export function check(project, { now = new Date(), proposedDocuments = new Map(), assumeProfile } = {}) {
+    const bundle = loadBundle(project, { assumeProfile });
     const output = [...bundle.diagnostics];
     if (!bundle.config) return output;
     for (const [file, content] of proposedDocuments) {

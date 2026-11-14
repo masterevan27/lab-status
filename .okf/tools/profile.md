@@ -1,6 +1,6 @@
 # Project documentation profile 1.2.0
 
-This is the portable house policy carried by project-okf-tools 0.2.4. It targets
+This is the portable house policy carried by project-okf-tools 0.2.5. It targets
 [OKF v0.2 at the pinned revision](https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/0b87c52c6ef999286c745e19998fdfcd03d5dbee/SPEC.md).
 The JSON lock is profile.json. Upstream conformance and house requirements are
 distinct: the checker enforces structural rules; editorial requirements also
@@ -182,8 +182,10 @@ Borrow another checkout's tools only after confirming all runtime sources,
 package files and profile files match the project's pinned snapshot exactly;
 a matching profile version alone is insufficient.
 
-To update tools, review the source release and copy its runtime files and lockfile
-as a single reviewed change; reinstall dependencies and rerun checks. Preserve
-project config and handwritten indexes. Review upstream specification changes
+To update a project's tools, run the upgrade command described in the adoption guide;
+it copies the runtime files and lockfile, reinstalls dependencies and reruns checks,
+and preserves project config and handwritten indexes. Review upstream specification changes
 before changing the pinned revision, profile version, examples and tests. Keep
-the previous snapshot available through Git. No automatic network upgrades occur.
+the previous snapshot available through Git. No automatic network upgrades occur;
+a project takes a new snapshot with `node tools/okf/cli.mjs upgrade PROJECT` when
+it is next touched (see the adoption guide).
